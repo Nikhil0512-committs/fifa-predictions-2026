@@ -1,0 +1,15 @@
+pandas>=2.2
+numpy>=1.26
+scikit-learn>=1.5
+joblib>=1.4
+streamlit>=1.36
+fastapi>=0.111
+uvicorn>=0.30
+requests>=2.32
+beautifulsoup4>=4.12
+python-dotenv>=1.0
+
+# Optional model backends. The trainer auto-detects these if installed.
+xgboost>=2.0
+lightgbm>=4.4
+catboost>=1.2

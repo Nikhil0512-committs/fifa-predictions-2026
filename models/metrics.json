@@ -1,0 +1,68 @@
+{
+  "target": "quarter_finalist used as team-strength target for match probabilities",
+  "best_classifier": "catboost",
+  "classification": {
+    "random_forest": {
+      "accuracy": 0.7708333333333334,
+      "roc_auc": 0.7335069444444444,
+      "log_loss": 0.5446548156799716
+    },
+    "neural_network": {
+      "accuracy": 0.75,
+      "roc_auc": 0.717013888888889,
+      "log_loss": 1.2290375017660684
+    },
+    "xgboost": {
+      "accuracy": 0.7760416666666666,
+      "roc_auc": 0.7021122685185185,
+      "log_loss": 0.62116938829422
+    },
+    "lightgbm": {
+      "accuracy": 0.734375,
+      "roc_auc": 0.6714409722222221,
+      "log_loss": 0.7062245685816558
+    },
+    "catboost": {
+      "accuracy": 0.7864583333333334,
+      "roc_auc": 0.7472511574074074,
+      "log_loss": 0.5319267467545777
+    }
+  },
+  "scoreline_regression": {
+    "goals_for_mae": 0.007023545137395487,
+    "goals_against_mae": 0.008163604159686646
+  },
+  "feature_columns": [
+    "continent",
+    "is_host",
+    "goals_scored_last_4y",
+    "goals_received_last_4y",
+    "wins_last_4y",
+    "losses_last_4y",
+    "draws_last_4y",
+    "world_cup_titles_before",
+    "squad_total_market_value_eur",
+    "fifa_rank_pre_tournament",
+    "fifa_points_pre_tournament",
+    "squad_avg_age",
+    "world_cup_participations_before",
+    "groups_passed_before",
+    "round16_before",
+    "quarterfinals_before",
+    "semifinals_before",
+    "finals_before",
+    "points_per_match_last_4y",
+    "goal_difference_last_4y",
+    "goals_for_per_match",
+    "goals_against_per_match",
+    "market_value_log",
+    "ranking_strength",
+    "tournament_depth",
+    "avg_player_form",
+    "injured_doubtful_count",
+    "total_caps",
+    "total_goals",
+    "team_astrology_score",
+    "team_numerology_score"
+  ]
+}
