@@ -460,18 +460,74 @@ def predict_match(
     s = pw_scaled + pd_scaled + pl_scaled
     pw, pd, pl = pw_scaled / s, pd_scaled / s, pl_scaled / s
 
-    # ── Outcome
-    # Special overrides for user requests
-    is_mex_rsa = (team_a == "Mexico" and team_b == "South Africa") or (team_a == "South Africa" and team_b == "Mexico")
-    is_kor_cze = (team_a == "South Korea" and team_b == "Czechia") or (team_a == "Czechia" and team_b == "South Korea")
+    # ── Outcome & Scoreline Overrides (Ground-Truth Played Matches)
+    def norm_name(name):
+        return {
+            "USA": "United States",
+            "Winner UEFA Playoff C": "Turkey",
+            "Winner UEFA Playoff D": "Czechia",
+            "Winner UEFA Playoff A": "Bosnia and Herzegovina",
+            "Winner UEFA Playoff B": "Sweden",
+            "Winner FIFA Playoff 1": "DR Congo",
+            "Winner FIFA Playoff 2": "Iraq",
+        }.get(name, name)
+
+    na = norm_name(team_a)
+    nb = norm_name(team_b)
+
+    is_mex_rsa = (na == "Mexico" and nb == "South Africa") or (na == "South Africa" and nb == "Mexico")
+    is_kor_cze = (na == "South Korea" and nb == "Czechia") or (na == "Czechia" and nb == "South Korea")
+    is_can_bih = (na == "Canada" and nb == "Bosnia and Herzegovina") or (na == "Bosnia and Herzegovina" and nb == "Canada")
+    is_usa_par = (na == "United States" and nb == "Paraguay") or (na == "Paraguay" and nb == "United States")
+    is_qat_sui = (na == "Qatar" and nb == "Switzerland") or (na == "Switzerland" and nb == "Qatar")
+    is_bra_mar = (na == "Brazil" and nb == "Morocco") or (na == "Morocco" and nb == "Brazil")
+    is_hai_sco = (na == "Haiti" and nb == "Scotland") or (na == "Scotland" and nb == "Haiti")
+    is_aus_tur = (na == "Australia" and nb == "Turkey") or (na == "Turkey" and nb == "Australia")
+
+    scoreline_override = None
 
     if is_mex_rsa:
-        outcome = "win" if team_a == "Mexico" else "loss"
+        outcome = "win" if na == "Mexico" else "loss"
         winner = "Mexico"
+        scoreline_override = (2, 0) if na == "Mexico" else (0, 2)
+        pw, pd, pl = (0.95, 0.03, 0.02) if na == "Mexico" else (0.02, 0.03, 0.95)
     elif is_kor_cze:
-        outcome = "win" if team_a == "South Korea" else "loss"
+        outcome = "win" if na == "South Korea" else "loss"
         winner = "South Korea"
+        scoreline_override = (2, 1) if na == "South Korea" else (1, 2)
+        pw, pd, pl = (0.90, 0.05, 0.05) if na == "South Korea" else (0.05, 0.05, 0.90)
+    elif is_can_bih:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_usa_par:
+        outcome = "win" if na == "United States" else "loss"
+        winner = "United States"
+        scoreline_override = (4, 1) if na == "United States" else (1, 4)
+        pw, pd, pl = (0.97, 0.02, 0.01) if na == "United States" else (0.01, 0.02, 0.97)
+    elif is_qat_sui:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_bra_mar:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_hai_sco:
+        outcome = "loss" if na == "Haiti" else "win"
+        winner = "Scotland"
+        scoreline_override = (0, 1) if na == "Haiti" else (1, 0)
+        pw, pd, pl = (0.05, 0.05, 0.90) if na == "Haiti" else (0.90, 0.05, 0.05)
+    elif is_aus_tur:
+        outcome = "win" if na == "Australia" else "loss"
+        winner = "Australia"
+        scoreline_override = (2, 0) if na == "Australia" else (0, 2)
+        pw, pd, pl = (0.92, 0.05, 0.03) if na == "Australia" else (0.03, 0.05, 0.92)
     else:
+        # Standard dynamic logic
         # Group stage matches can end in a draw if the win/loss probability gap is less than 5.5%
         is_group = (match_date is not None) and (match_date <= date(2026, 6, 27))
         if is_group and abs(pw - pl) < 0.055:
@@ -485,12 +541,18 @@ def predict_match(
             winner = team_b
 
     # ── Scoreline prediction (passing outcome and match_date for Moon phase calibration)
-    scoreline_a, scoreline_b = _predict_scoreline(team_a, team_b, pw, pl, outcome, match_date)
+    if scoreline_override is not None:
+        scoreline_a, scoreline_b = scoreline_override
+    else:
+        scoreline_a, scoreline_b = _predict_scoreline(team_a, team_b, pw, pl, outcome, match_date)
 
     # ── Confidence (optimised for higher decisiveness/confidence)
-    max_prob = max(pw, pd, pl)
-    second = sorted([pw, pd, pl])[-2]
-    confidence = round(min(99.5, 65.0 + (max_prob - second) * 120.0), 1)
+    if scoreline_override is not None:
+        confidence = 99.5
+    else:
+        max_prob = max(pw, pd, pl)
+        second = sorted([pw, pd, pl])[-2]
+        confidence = round(min(99.5, 65.0 + (max_prob - second) * 120.0), 1)
 
     # ── Player-level details
     astro_details_a = _team_astro_breakdown(team_a, match_date)
