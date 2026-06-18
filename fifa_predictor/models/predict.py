@@ -404,6 +404,93 @@ def numerology_probabilities(team_a: str, team_b: str, match_date: date | None =
 
 # ─── 4. FUSION ENGINE ──────────────────────────────────────────────────────────
 
+_MODEL_ARTIFACTS = None
+_TEAM_FEATURES_DF = None
+
+def _load_ml_model():
+    global _MODEL_ARTIFACTS, _TEAM_FEATURES_DF
+    if _MODEL_ARTIFACTS is None:
+        import joblib
+        import pandas as pd
+        import sqlite3
+        from fifa_predictor import config
+        
+        # Load pipeline
+        try:
+            _MODEL_ARTIFACTS = joblib.load(config.MODEL_PATH)
+        except Exception as e:
+            print(f"Warning: Could not load ML model: {e}")
+            _MODEL_ARTIFACTS = False
+            
+        # Load team features
+        try:
+            conn = sqlite3.connect(config.SQLITE_DB)
+            _TEAM_FEATURES_DF = pd.read_sql_query("SELECT * FROM team_2026_features;", conn)
+            conn.close()
+        except Exception as e:
+            print(f"Warning: Could not load team features from DB: {e}")
+            _TEAM_FEATURES_DF = None
+
+def _poisson_probability(actual: int, mean: float) -> float:
+    if mean <= 0:
+        return 1.0 if actual == 0 else 0.0
+    return (mean ** actual) * math.exp(-mean) / math.factorial(actual)
+
+def _get_team_ml_stats(team: str, match_date: date) -> dict[str, float] | None:
+    _load_ml_model()
+    if not _MODEL_ARTIFACTS or _TEAM_FEATURES_DF is None:
+        return None
+    try:
+        from fifa_predictor.features.build import add_derived_team_features, add_experimental_features
+        row = _TEAM_FEATURES_DF[_TEAM_FEATURES_DF["team"] == team]
+        if row.empty:
+            return None
+        df = row.copy()
+        df = add_derived_team_features(df)
+        df = add_experimental_features(df, match_date=match_date.isoformat())
+        X = df[_MODEL_ARTIFACTS.metrics["feature_columns"]]
+        qf = float(_MODEL_ARTIFACTS.classifier.predict_proba(X)[0, 1])
+        gf = float(_MODEL_ARTIFACTS.goals_for_model.predict(X)[0])
+        ga = float(_MODEL_ARTIFACTS.goals_against_model.predict(X)[0])
+        return {"qf": qf, "gf": gf, "ga": ga}
+    except Exception as e:
+        print(f"Error in _get_team_ml_stats for {team}: {e}")
+        return None
+
+def ml_probabilities(team_a: str, team_b: str, match_date: date) -> tuple[float, float, float] | None:
+    try:
+        stats_a = _get_team_ml_stats(team_a, match_date)
+        stats_b = _get_team_ml_stats(team_b, match_date)
+        if stats_a is None or stats_b is None:
+            return None
+            
+        lambda_a = (stats_a["gf"] + stats_b["ga"]) / 2.0
+        lambda_b = (stats_b["gf"] + stats_a["ga"]) / 2.0
+        
+        p_win_a = 0.0
+        p_draw = 0.0
+        p_win_b = 0.0
+        
+        for x in range(9):
+            p_x = _poisson_probability(x, lambda_a)
+            for y in range(9):
+                p_y = _poisson_probability(y, lambda_b)
+                p_xy = p_x * p_y
+                if x > y:
+                    p_win_a += p_xy
+                elif x == y:
+                    p_draw += p_xy
+                else:
+                    p_win_b += p_xy
+                    
+        s = p_win_a + p_draw + p_win_b
+        if s <= 0:
+            return 0.33, 0.34, 0.33
+        return p_win_a / s, p_draw / s, p_win_b / s
+    except Exception as e:
+        print(f"Error calculating ML probabilities: {e}")
+        return None
+
 def predict_match(
     team_a: str,
     team_b: str,
@@ -413,7 +500,7 @@ def predict_match(
     numerology_weight: float = NUMEROLOGY_W,
 ) -> dict[str, Any]:
     """
-    Unified prediction combining Football + Astrology + Numerology.
+    Unified prediction combining Football + Astrology + Numerology + ML model.
     """
     if match_date is None:
         match_date = date.today()
@@ -422,6 +509,17 @@ def predict_match(
     f_pw, f_pd, f_pl = football_probabilities(team_a, team_b)
     a_pw, a_pd, a_pl = astro_probabilities(team_a, team_b, match_date)
     n_pw, n_pd, n_pl = numerology_probabilities(team_a, team_b, match_date)
+
+    # ── Blend ML probabilities into the football pillar if available
+    ml_probs = ml_probabilities(team_a, team_b, match_date)
+    if ml_probs is not None:
+        ml_pw, ml_pd, ml_pl = ml_probs
+        # Blend ML probabilities (50/50) with the heuristic football probabilities
+        f_pw = f_pw * 0.5 + ml_pw * 0.5
+        f_pd = f_pd * 0.5 + ml_pd * 0.5
+        f_pl = f_pl * 0.5 + ml_pl * 0.5
+        s = f_pw + f_pd + f_pl
+        f_pw, f_pd, f_pl = f_pw / s, f_pd / s, f_pl / s
 
     # ── Weighted fusion
     total_w = football_weight + astro_weight + numerology_weight
@@ -460,7 +558,7 @@ def predict_match(
     s = pw_scaled + pd_scaled + pl_scaled
     pw, pd, pl = pw_scaled / s, pd_scaled / s, pl_scaled / s
 
-    # ── Outcome & Scoreline Overrides (Ground-Truth Played Matches)
+    # ── Outcome & Scoreline Overrides (Ground-Truth Played Matches as of June 18, 2026)
     def norm_name(name):
         return {
             "USA": "United States",
@@ -470,6 +568,10 @@ def predict_match(
             "Winner UEFA Playoff B": "Sweden",
             "Winner FIFA Playoff 1": "DR Congo",
             "Winner FIFA Playoff 2": "Iraq",
+            "Cabo Verde": "Cape Verde",
+            "Curaao": "Curaçao",
+            "Cte d'Ivoire": "Ivory Coast",
+            "IR Iran": "Iran",
         }.get(name, name)
 
     na = norm_name(team_a)
@@ -483,6 +585,24 @@ def predict_match(
     is_bra_mar = (na == "Brazil" and nb == "Morocco") or (na == "Morocco" and nb == "Brazil")
     is_hai_sco = (na == "Haiti" and nb == "Scotland") or (na == "Scotland" and nb == "Haiti")
     is_aus_tur = (na == "Australia" and nb == "Turkey") or (na == "Turkey" and nb == "Australia")
+    is_ger_cur = (na == "Germany" and nb == "Curaçao") or (na == "Curaçao" and nb == "Germany")
+    is_ned_jap = (na == "Netherlands" and nb == "Japan") or (na == "Japan" and nb == "Netherlands")
+    is_civ_ecu = (na == "Ivory Coast" and nb == "Ecuador") or (na == "Ecuador" and nb == "Ivory Coast")
+    is_swe_tun = (na == "Sweden" and nb == "Tunisia") or (na == "Tunisia" and nb == "Sweden")
+    is_esp_cpv = (na == "Spain" and nb == "Cape Verde") or (na == "Cape Verde" and nb == "Spain")
+    is_bel_egy = (na == "Belgium" and nb == "Egypt") or (na == "Egypt" and nb == "Belgium")
+    is_sau_uru = (na == "Saudi Arabia" and nb == "Uruguay") or (na == "Uruguay" and nb == "Saudi Arabia")
+    is_irn_nzl = (na == "Iran" and nb == "New Zealand") or (na == "New Zealand" and nb == "Iran")
+    is_fra_sen = (na == "France" and nb == "Senegal") or (na == "Senegal" and nb == "France")
+    is_irq_nor = (na == "Iraq" and nb == "Norway") or (na == "Norway" and nb == "Iraq")
+    is_arg_alg = (na == "Argentina" and nb == "Algeria") or (na == "Algeria" and nb == "Argentina")
+    is_aut_jor = (na == "Austria" and nb == "Jordan") or (na == "Jordan" and nb == "Austria")
+    is_por_cod = (na == "Portugal" and nb == "DR Congo") or (na == "DR Congo" and nb == "Portugal")
+    is_eng_cro = (na == "England" and nb == "Croatia") or (na == "Croatia" and nb == "England")
+    is_gha_pan = (na == "Ghana" and nb == "Panama") or (na == "Panama" and nb == "Ghana")
+    is_uzb_col = (na == "Uzbekistan" and nb == "Colombia") or (na == "Colombia" and nb == "Uzbekistan")
+    is_cze_rsa = (na == "Czechia" and nb == "South Africa") or (na == "South Africa" and nb == "Czechia")
+    is_sui_bih = (na == "Switzerland" and nb == "Bosnia and Herzegovina") or (na == "Bosnia and Herzegovina" and nb == "Switzerland")
 
     scoreline_override = None
 
@@ -526,6 +646,96 @@ def predict_match(
         winner = "Australia"
         scoreline_override = (2, 0) if na == "Australia" else (0, 2)
         pw, pd, pl = (0.92, 0.05, 0.03) if na == "Australia" else (0.03, 0.05, 0.92)
+    elif is_ger_cur:
+        outcome = "win" if na == "Germany" else "loss"
+        winner = "Germany"
+        scoreline_override = (7, 1) if na == "Germany" else (1, 7)
+        pw, pd, pl = (0.98, 0.01, 0.01) if na == "Germany" else (0.01, 0.01, 0.98)
+    elif is_ned_jap:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (2, 2)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_civ_ecu:
+        outcome = "win" if na == "Ivory Coast" else "loss"
+        winner = "Ivory Coast"
+        scoreline_override = (1, 0) if na == "Ivory Coast" else (0, 1)
+        pw, pd, pl = (0.80, 0.15, 0.05) if na == "Ivory Coast" else (0.05, 0.15, 0.80)
+    elif is_swe_tun:
+        outcome = "win" if na == "Sweden" else "loss"
+        winner = "Sweden"
+        scoreline_override = (5, 1) if na == "Sweden" else (1, 5)
+        pw, pd, pl = (0.95, 0.03, 0.02) if na == "Sweden" else (0.02, 0.03, 0.95)
+    elif is_esp_cpv:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (0, 0)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_bel_egy:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_sau_uru:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_irn_nzl:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (2, 2)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_fra_sen:
+        outcome = "win" if na == "France" else "loss"
+        winner = "France"
+        scoreline_override = (3, 1) if na == "France" else (1, 3)
+        pw, pd, pl = (0.90, 0.07, 0.03) if na == "France" else (0.03, 0.07, 0.90)
+    elif is_irq_nor:
+        outcome = "loss" if na == "Iraq" else "win"
+        winner = "Norway"
+        scoreline_override = (1, 4) if na == "Iraq" else (4, 1)
+        pw, pd, pl = (0.02, 0.03, 0.95) if na == "Iraq" else (0.95, 0.03, 0.02)
+    elif is_arg_alg:
+        outcome = "win" if na == "Argentina" else "loss"
+        winner = "Argentina"
+        scoreline_override = (3, 0) if na == "Argentina" else (0, 3)
+        pw, pd, pl = (0.97, 0.02, 0.01) if na == "Argentina" else (0.01, 0.02, 0.97)
+    elif is_aut_jor:
+        outcome = "win" if na == "Austria" else "loss"
+        winner = "Austria"
+        scoreline_override = (3, 1) if na == "Austria" else (1, 3)
+        pw, pd, pl = (0.92, 0.05, 0.03) if na == "Austria" else (0.03, 0.05, 0.92)
+    elif is_por_cod:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_eng_cro:
+        outcome = "win" if na == "England" else "loss"
+        winner = "England"
+        scoreline_override = (4, 2) if na == "England" else (2, 4)
+        pw, pd, pl = (0.94, 0.04, 0.02) if na == "England" else (0.02, 0.04, 0.94)
+    elif is_gha_pan:
+        outcome = "win" if na == "Ghana" else "loss"
+        winner = "Ghana"
+        scoreline_override = (1, 0) if na == "Ghana" else (0, 1)
+        pw, pd, pl = (0.85, 0.10, 0.05) if na == "Ghana" else (0.05, 0.10, 0.85)
+    elif is_uzb_col:
+        outcome = "loss" if na == "Uzbekistan" else "win"
+        winner = "Colombia"
+        scoreline_override = (1, 3) if na == "Uzbekistan" else (3, 1)
+        pw, pd, pl = (0.03, 0.07, 0.90) if na == "Uzbekistan" else (0.90, 0.07, 0.03)
+    elif is_cze_rsa:
+        outcome = "draw"
+        winner = "Draw"
+        scoreline_override = (1, 1)
+        pw, pd, pl = (0.33, 0.34, 0.33)
+    elif is_sui_bih:
+        outcome = "win" if na == "Switzerland" else "loss"
+        winner = "Switzerland"
+        scoreline_override = (4, 1) if na == "Switzerland" else (1, 4)
+        pw, pd, pl = (0.96, 0.03, 0.01) if na == "Switzerland" else (0.01, 0.03, 0.96)
     else:
         # Standard dynamic logic
         # Group stage matches can end in a draw if the win/loss probability gap is less than 5.5%
@@ -629,114 +839,110 @@ def _predict_scoreline(
     Predict scoreline based on relative strength, win probability, and predicted outcome.
     Returns a highly realistic football scoreline consistent with the outcome.
     Uses a deterministic hash of the match to introduce realistic scoreline variety.
+    Uses the ML models (CatBoost/GBR) to guide expectations if available.
     """
     sa = get_team_strength(team_a)
     sb = get_team_strength(team_b)
 
-    # ── Clean Sheet and Moon Phase calibrations
     form_a = RECENT_FORM.get(team_a, {"w": 4, "d": 3, "l": 3, "gf": 11, "ga": 12})
     form_b = RECENT_FORM.get(team_b, {"w": 4, "d": 3, "l": 3, "gf": 11, "ga": 12})
-    
-    # Moon phase defensive clean-sheet bias: new moon or waning moon leads to tighter play
-    # But let's make it a subtle modifier rather than a hard override
-    moon_clean_sheet = False
-    if match_date is not None:
-        cycle_day = (match_date.toordinal() % 29)
-        if cycle_day <= 3 or 18 <= cycle_day <= 28:
-            moon_clean_sheet = True
 
     # Deterministic hash of the match to select from realistic scoreline variations
     date_str = match_date.isoformat() if match_date else "2026-06-20"
     match_key = f"{team_a}:{team_b}:{date_str}"
     hash_val = int(hashlib.md5(match_key.encode()).hexdigest(), 16) % 100
 
-    # Clean sheet indicators based on defense form
-    strong_defense_a = form_a["ga"] < 10
-    strong_defense_b = form_b["ga"] < 10
-    weak_attack_a = form_a["gf"] < 11
-    weak_attack_b = form_b["gf"] < 11
+    # Try to load ML model goals predictions
+    _load_ml_model()
+    if _MODEL_ARTIFACTS and _TEAM_FEATURES_DF is not None and match_date is not None:
+        try:
+            stats_a = _get_team_ml_stats(team_a, match_date)
+            stats_b = _get_team_ml_stats(team_b, match_date)
+            if stats_a is not None and stats_b is not None:
+                # Expected goals baselines from regression models
+                lambda_a = (stats_a["gf"] + stats_b["ga"]) / 2.0
+                lambda_b = (stats_b["gf"] + stats_a["ga"]) / 2.0
+                
+                # Scale lambdas to align with realistic World Cup averages (~2.7 goals/match)
+                lambda_scale = 1.35
+                lambda_a *= lambda_scale
+                lambda_b *= lambda_scale
+                
+                # Adjust to make consistent with outcomes
+                if outcome == "win" and lambda_a <= lambda_b:
+                    lambda_a = lambda_b + 0.8
+                elif outcome == "loss" and lambda_b <= lambda_a:
+                    lambda_b = lambda_a + 0.8
+                elif outcome == "draw":
+                    avg_lambda = (lambda_a + lambda_b) / 2.0
+                    lambda_a = lambda_b = avg_lambda
+                
+                scores = []
+                for x in range(7):
+                    p_x = _poisson_probability(x, lambda_a)
+                    for y in range(7):
+                        p_y = _poisson_probability(y, lambda_b)
+                        p_xy = p_x * p_y
+                        if (outcome == "win" and x > y) or \
+                           (outcome == "draw" and x == y) or \
+                           (outcome == "loss" and x < y):
+                            scores.append((p_xy, (x, y)))
+                scores.sort(reverse=True)
+                top_choices = [score[1] for score in scores[:4]]
+                return top_choices[hash_val % len(top_choices)]
+        except Exception as e:
+            print(f"Warning: Fallback from ML scoreline prediction: {e}")
 
-    clean_sheet_bias = 0
-    if strong_defense_a or weak_attack_b:
-        clean_sheet_bias += 1
-    if moon_clean_sheet:
-        clean_sheet_bias += 1
+    # Fallback to heuristic scorelines if ML model fails or isn't available
+    att_a = form_a["gf"] / 10.0
+    att_b = form_b["gf"] / 10.0
+    match_goals_factor = (att_a + att_b) / 2.0
 
-    # User overrides
-    if (team_a == "Mexico" and team_b == "South Africa") or (team_a == "South Africa" and team_b == "Mexico"):
-        return (2, 0) if team_a == "Mexico" else (0, 2)
-    if (team_a == "South Korea" and team_b == "Czechia") or (team_a == "Czechia" and team_b == "South Korea"):
-        return (2, 1) if team_a == "South Korea" else (1, 2)
-
-    # 1. DRAW territory
     if outcome == "draw":
-        avg_strength = (sa + sb) / 2
-        if avg_strength > 0.65:
-            # High-scoring draw: 2-2 (70%), 3-3 (10%), 1-1 (20%)
-            choices = [(2, 2)] * 70 + [(3, 3)] * 10 + [(1, 1)] * 20
-        elif avg_strength < 0.45:
-            # Low-scoring draw: 0-0 (60%), 1-1 (40%)
-            choices = [(0, 0)] * 60 + [(1, 1)] * 40
+        if match_goals_factor > 1.5:
+            choices = [(2, 2)] * 50 + [(3, 3)] * 20 + [(1, 1)] * 30
+        elif match_goals_factor < 1.0:
+            choices = [(0, 0)] * 50 + [(1, 1)] * 50
         else:
-            # Standard draw: 1-1 (65%), 0-0 (20%), 2-2 (15%)
-            choices = [(1, 1)] * 65 + [(0, 0)] * 20 + [(2, 2)] * 15
-        
+            choices = [(1, 1)] * 50 + [(2, 2)] * 25 + [(0, 0)] * 20 + [(3, 3)] * 5
         return choices[hash_val % len(choices)]
-
-    # 2. TEAM A WIN territory
     elif outcome == "win":
         diff = pw - pl
+        is_high_scoring = (match_goals_factor > 1.3) and (hash_val % 3 != 0)
         if diff >= 0.45:
-            # Dominant win
-            if clean_sheet_bias >= 1:
-                choices = [(3, 0)] * 45 + [(2, 0)] * 35 + [(4, 0)] * 20
+            if is_high_scoring:
+                choices = [(3, 1)] * 30 + [(4, 1)] * 25 + [(5, 1)] * 15 + [(4, 2)] * 15 + [(3, 2)] * 15
             else:
-                choices = [(3, 1)] * 35 + [(3, 0)] * 30 + [(4, 1)] * 20 + [(2, 0)] * 15
+                choices = [(3, 0)] * 40 + [(2, 0)] * 30 + [(4, 0)] * 20 + [(3, 1)] * 10
         elif diff >= 0.25:
-            # Clear win
-            if clean_sheet_bias >= 2:
-                choices = [(2, 0)] * 60 + [(1, 0)] * 40
-            elif clean_sheet_bias == 1:
-                choices = [(2, 0)] * 45 + [(1, 0)] * 25 + [(3, 0)] * 15 + [(2, 1)] * 15
+            if is_high_scoring:
+                choices = [(3, 1)] * 35 + [(2, 1)] * 25 + [(3, 2)] * 25 + [(4, 2)] * 15
             else:
-                choices = [(2, 1)] * 40 + [(3, 1)] * 25 + [(2, 0)] * 20 + [(1, 0)] * 15
+                choices = [(2, 0)] * 45 + [(3, 0)] * 25 + [(1, 0)] * 15 + [(2, 1)] * 15
         else:
-            # Narrow win
-            if clean_sheet_bias >= 2:
-                choices = [(1, 0)] * 80 + [(2, 0)] * 20
-            elif clean_sheet_bias == 1:
-                choices = [(1, 0)] * 60 + [(2, 1)] * 40
+            if is_high_scoring:
+                choices = [(2, 1)] * 45 + [(3, 2)] * 40 + [(4, 3)] * 15
             else:
-                choices = [(2, 1)] * 55 + [(1, 0)] * 30 + [(3, 2)] * 15
-
+                choices = [(1, 0)] * 55 + [(2, 1)] * 30 + [(2, 0)] * 15
         return choices[hash_val % len(choices)]
-
-    # 3. TEAM B WIN territory
     else:
         diff = pl - pw
+        is_high_scoring = (match_goals_factor > 1.3) and (hash_val % 3 != 0)
         if diff >= 0.45:
-            # Dominant win
-            if clean_sheet_bias >= 1:
-                choices = [(0, 3)] * 45 + [(0, 2)] * 35 + [(0, 4)] * 20
+            if is_high_scoring:
+                choices = [(1, 3)] * 30 + [(1, 4)] * 25 + [(1, 5)] * 15 + [(2, 4)] * 15 + [(2, 3)] * 15
             else:
-                choices = [(1, 3)] * 35 + [(0, 3)] * 30 + [(1, 4)] * 20 + [(0, 2)] * 15
+                choices = [(0, 3)] * 40 + [(0, 2)] * 30 + [(0, 4)] * 20 + [(1, 3)] * 10
         elif diff >= 0.25:
-            # Clear win
-            if clean_sheet_bias >= 2:
-                choices = [(0, 2)] * 60 + [(0, 1)] * 40
-            elif clean_sheet_bias == 1:
-                choices = [(0, 2)] * 45 + [(0, 1)] * 25 + [(0, 3)] * 15 + [(1, 2)] * 15
+            if is_high_scoring:
+                choices = [(1, 3)] * 35 + [(1, 2)] * 25 + [(2, 3)] * 25 + [(2, 4)] * 15
             else:
-                choices = [(1, 2)] * 40 + [(1, 3)] * 25 + [(0, 2)] * 20 + [(0, 1)] * 15
+                choices = [(0, 2)] * 45 + [(0, 3)] * 25 + [(0, 1)] * 15 + [(1, 2)] * 15
         else:
-            # Narrow win
-            if clean_sheet_bias >= 2:
-                choices = [(0, 1)] * 80 + [(0, 2)] * 20
-            elif clean_sheet_bias == 1:
-                choices = [(0, 1)] * 60 + [(1, 2)] * 40
+            if is_high_scoring:
+                choices = [(1, 2)] * 45 + [(2, 3)] * 40 + [(3, 4)] * 15
             else:
-                choices = [(1, 2)] * 55 + [(0, 1)] * 30 + [(2, 3)] * 15
-
+                choices = [(0, 1)] * 55 + [(1, 2)] * 30 + [(0, 2)] * 15
         return choices[hash_val % len(choices)]
 
 

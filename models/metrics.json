@@ -4,33 +4,33 @@
   "classification": {
     "random_forest": {
       "accuracy": 0.7708333333333334,
-      "roc_auc": 0.7335069444444444,
-      "log_loss": 0.5446548156799716
+      "roc_auc": 0.734375,
+      "log_loss": 0.5453025208957479
     },
     "neural_network": {
-      "accuracy": 0.75,
-      "roc_auc": 0.717013888888889,
-      "log_loss": 1.2290375017660684
+      "accuracy": 0.734375,
+      "roc_auc": 0.7102141203703703,
+      "log_loss": 1.246503866950824
     },
     "xgboost": {
-      "accuracy": 0.7760416666666666,
-      "roc_auc": 0.7021122685185185,
-      "log_loss": 0.62116938829422
+      "accuracy": 0.7447916666666666,
+      "roc_auc": 0.6989293981481481,
+      "log_loss": 0.6154407858848572
     },
     "lightgbm": {
-      "accuracy": 0.734375,
-      "roc_auc": 0.6714409722222221,
-      "log_loss": 0.7062245685816558
+      "accuracy": 0.7447916666666666,
+      "roc_auc": 0.6767939814814815,
+      "log_loss": 0.7068876817994759
     },
     "catboost": {
-      "accuracy": 0.7864583333333334,
-      "roc_auc": 0.7472511574074074,
-      "log_loss": 0.5319267467545777
+      "accuracy": 0.7760416666666666,
+      "roc_auc": 0.7348090277777778,
+      "log_loss": 0.5400867158843288
     }
   },
   "scoreline_regression": {
-    "goals_for_mae": 0.007023545137395487,
-    "goals_against_mae": 0.008163604159686646
+    "goals_for_mae": 0.0062538940926461185,
+    "goals_against_mae": 0.008200533134318835
   },
   "feature_columns": [
     "continent",
