@@ -302,18 +302,22 @@ st.markdown("""
 .outcome-win { background: rgba(0,255,148,0.15); color: #00ff94; border: 1px solid rgba(0,255,148,0.25); }
 .outcome-draw { background: rgba(255,200,0,0.12); color: #ffc800; border: 1px solid rgba(255,200,0,0.25); }
 
-/* Right Panel View */
-.detail-container {
+/* Right Panel Sticky Column Wrapper */
+div[data-testid="column"]:has(.detail-container) {
     position: -webkit-sticky;
     position: sticky;
     top: 1.5rem;
+    align-self: start;
+}
+
+/* Right Panel View */
+.detail-container {
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 16px;
     padding: 1.5rem;
     min-height: 75vh;
     backdrop-filter: blur(20px);
-    z-index: 99;
 }
 .main-winner-card {
     background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(168,85,247,0.08), rgba(0,255,148,0.04));
