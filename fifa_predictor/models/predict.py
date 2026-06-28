@@ -491,6 +491,57 @@ def ml_probabilities(team_a: str, team_b: str, match_date: date) -> tuple[float,
         print(f"Error calculating ML probabilities: {e}")
         return None
 
+_ACTUAL_RESULTS = None
+
+def _load_actual_results() -> dict[tuple[str, str], tuple[int, int]]:
+    global _ACTUAL_RESULTS
+    if _ACTUAL_RESULTS is not None:
+        return _ACTUAL_RESULTS
+    
+    import json
+    import os
+    
+    _ACTUAL_RESULTS = {}
+    json_path = "./scratch/group_stage_wiki_results.json"
+    if not os.path.exists(json_path):
+        # try parent directory or absolute path relative to project root
+        json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "scratch", "group_stage_wiki_results.json")
+        
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                
+                name_mapping = {
+                    "Czech Republic": "Czechia",
+                    "Cabo Verde": "Cape Verde",
+                    "Curaao": "Curaçao",
+                    "Cte d'Ivoire": "Ivory Coast",
+                    "IR Iran": "Iran",
+                    "Türkiye": "Turkey",
+                    "USA": "United States",
+                    "Winner UEFA Playoff A": "Bosnia and Herzegovina",
+                    "Winner UEFA Playoff B": "Sweden",
+                    "Winner UEFA Playoff C": "Turkey",
+                    "Winner UEFA Playoff D": "Czechia",
+                    "Winner FIFA Playoff 1": "DR Congo",
+                    "Winner FIFA Playoff 2": "Iraq",
+                }
+                def clean_name(n):
+                    return name_mapping.get(n, n)
+                
+                for item in data:
+                    if item.get("has_score"):
+                        home = clean_name(item["home_team"])
+                        away = clean_name(item["away_team"])
+                        sh = item.get("score_home")
+                        sa = item.get("score_away")
+                        if sh is not None and sa is not None:
+                            _ACTUAL_RESULTS[(home, away)] = (sh, sa)
+        except Exception as e:
+            print(f"Warning: Could not load actual results from {json_path}: {e}")
+    return _ACTUAL_RESULTS
+
 def predict_match(
     team_a: str,
     team_b: str,
@@ -558,7 +609,7 @@ def predict_match(
     s = pw_scaled + pd_scaled + pl_scaled
     pw, pd, pl = pw_scaled / s, pd_scaled / s, pl_scaled / s
 
-    # ── Outcome & Scoreline Overrides (Ground-Truth Played Matches as of June 18, 2026)
+    # ── Outcome & Scoreline Overrides using Ground-Truth Played Matches
     def norm_name(name):
         return {
             "USA": "United States",
@@ -577,170 +628,43 @@ def predict_match(
     na = norm_name(team_a)
     nb = norm_name(team_b)
 
-    is_mex_rsa = (na == "Mexico" and nb == "South Africa") or (na == "South Africa" and nb == "Mexico")
-    is_kor_cze = (na == "South Korea" and nb == "Czechia") or (na == "Czechia" and nb == "South Korea")
-    is_can_bih = (na == "Canada" and nb == "Bosnia and Herzegovina") or (na == "Bosnia and Herzegovina" and nb == "Canada")
-    is_usa_par = (na == "United States" and nb == "Paraguay") or (na == "Paraguay" and nb == "United States")
-    is_qat_sui = (na == "Qatar" and nb == "Switzerland") or (na == "Switzerland" and nb == "Qatar")
-    is_bra_mar = (na == "Brazil" and nb == "Morocco") or (na == "Morocco" and nb == "Brazil")
-    is_hai_sco = (na == "Haiti" and nb == "Scotland") or (na == "Scotland" and nb == "Haiti")
-    is_aus_tur = (na == "Australia" and nb == "Turkey") or (na == "Turkey" and nb == "Australia")
-    is_ger_cur = (na == "Germany" and nb == "Curaçao") or (na == "Curaçao" and nb == "Germany")
-    is_ned_jap = (na == "Netherlands" and nb == "Japan") or (na == "Japan" and nb == "Netherlands")
-    is_civ_ecu = (na == "Ivory Coast" and nb == "Ecuador") or (na == "Ecuador" and nb == "Ivory Coast")
-    is_swe_tun = (na == "Sweden" and nb == "Tunisia") or (na == "Tunisia" and nb == "Sweden")
-    is_esp_cpv = (na == "Spain" and nb == "Cape Verde") or (na == "Cape Verde" and nb == "Spain")
-    is_bel_egy = (na == "Belgium" and nb == "Egypt") or (na == "Egypt" and nb == "Belgium")
-    is_sau_uru = (na == "Saudi Arabia" and nb == "Uruguay") or (na == "Uruguay" and nb == "Saudi Arabia")
-    is_irn_nzl = (na == "Iran" and nb == "New Zealand") or (na == "New Zealand" and nb == "Iran")
-    is_fra_sen = (na == "France" and nb == "Senegal") or (na == "Senegal" and nb == "France")
-    is_irq_nor = (na == "Iraq" and nb == "Norway") or (na == "Norway" and nb == "Iraq")
-    is_arg_alg = (na == "Argentina" and nb == "Algeria") or (na == "Algeria" and nb == "Argentina")
-    is_aut_jor = (na == "Austria" and nb == "Jordan") or (na == "Jordan" and nb == "Austria")
-    is_por_cod = (na == "Portugal" and nb == "DR Congo") or (na == "DR Congo" and nb == "Portugal")
-    is_eng_cro = (na == "England" and nb == "Croatia") or (na == "Croatia" and nb == "England")
-    is_gha_pan = (na == "Ghana" and nb == "Panama") or (na == "Panama" and nb == "Ghana")
-    is_uzb_col = (na == "Uzbekistan" and nb == "Colombia") or (na == "Colombia" and nb == "Uzbekistan")
-    is_cze_rsa = (na == "Czechia" and nb == "South Africa") or (na == "South Africa" and nb == "Czechia")
-    is_sui_bih = (na == "Switzerland" and nb == "Bosnia and Herzegovina") or (na == "Bosnia and Herzegovina" and nb == "Switzerland")
-
+    actuals = _load_actual_results()
     scoreline_override = None
 
-    if is_mex_rsa:
-        outcome = "win" if na == "Mexico" else "loss"
-        winner = "Mexico"
-        scoreline_override = (2, 0) if na == "Mexico" else (0, 2)
-        pw, pd, pl = (0.95, 0.03, 0.02) if na == "Mexico" else (0.02, 0.03, 0.95)
-    elif is_kor_cze:
-        outcome = "win" if na == "South Korea" else "loss"
-        winner = "South Korea"
-        scoreline_override = (2, 1) if na == "South Korea" else (1, 2)
-        pw, pd, pl = (0.90, 0.05, 0.05) if na == "South Korea" else (0.05, 0.05, 0.90)
-    elif is_can_bih:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_usa_par:
-        outcome = "win" if na == "United States" else "loss"
-        winner = "United States"
-        scoreline_override = (4, 1) if na == "United States" else (1, 4)
-        pw, pd, pl = (0.97, 0.02, 0.01) if na == "United States" else (0.01, 0.02, 0.97)
-    elif is_qat_sui:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_bra_mar:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_hai_sco:
-        outcome = "loss" if na == "Haiti" else "win"
-        winner = "Scotland"
-        scoreline_override = (0, 1) if na == "Haiti" else (1, 0)
-        pw, pd, pl = (0.05, 0.05, 0.90) if na == "Haiti" else (0.90, 0.05, 0.05)
-    elif is_aus_tur:
-        outcome = "win" if na == "Australia" else "loss"
-        winner = "Australia"
-        scoreline_override = (2, 0) if na == "Australia" else (0, 2)
-        pw, pd, pl = (0.92, 0.05, 0.03) if na == "Australia" else (0.03, 0.05, 0.92)
-    elif is_ger_cur:
-        outcome = "win" if na == "Germany" else "loss"
-        winner = "Germany"
-        scoreline_override = (7, 1) if na == "Germany" else (1, 7)
-        pw, pd, pl = (0.98, 0.01, 0.01) if na == "Germany" else (0.01, 0.01, 0.98)
-    elif is_ned_jap:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (2, 2)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_civ_ecu:
-        outcome = "win" if na == "Ivory Coast" else "loss"
-        winner = "Ivory Coast"
-        scoreline_override = (1, 0) if na == "Ivory Coast" else (0, 1)
-        pw, pd, pl = (0.80, 0.15, 0.05) if na == "Ivory Coast" else (0.05, 0.15, 0.80)
-    elif is_swe_tun:
-        outcome = "win" if na == "Sweden" else "loss"
-        winner = "Sweden"
-        scoreline_override = (5, 1) if na == "Sweden" else (1, 5)
-        pw, pd, pl = (0.95, 0.03, 0.02) if na == "Sweden" else (0.02, 0.03, 0.95)
-    elif is_esp_cpv:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (0, 0)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_bel_egy:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_sau_uru:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_irn_nzl:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (2, 2)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_fra_sen:
-        outcome = "win" if na == "France" else "loss"
-        winner = "France"
-        scoreline_override = (3, 1) if na == "France" else (1, 3)
-        pw, pd, pl = (0.90, 0.07, 0.03) if na == "France" else (0.03, 0.07, 0.90)
-    elif is_irq_nor:
-        outcome = "loss" if na == "Iraq" else "win"
-        winner = "Norway"
-        scoreline_override = (1, 4) if na == "Iraq" else (4, 1)
-        pw, pd, pl = (0.02, 0.03, 0.95) if na == "Iraq" else (0.95, 0.03, 0.02)
-    elif is_arg_alg:
-        outcome = "win" if na == "Argentina" else "loss"
-        winner = "Argentina"
-        scoreline_override = (3, 0) if na == "Argentina" else (0, 3)
-        pw, pd, pl = (0.97, 0.02, 0.01) if na == "Argentina" else (0.01, 0.02, 0.97)
-    elif is_aut_jor:
-        outcome = "win" if na == "Austria" else "loss"
-        winner = "Austria"
-        scoreline_override = (3, 1) if na == "Austria" else (1, 3)
-        pw, pd, pl = (0.92, 0.05, 0.03) if na == "Austria" else (0.03, 0.05, 0.92)
-    elif is_por_cod:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_eng_cro:
-        outcome = "win" if na == "England" else "loss"
-        winner = "England"
-        scoreline_override = (4, 2) if na == "England" else (2, 4)
-        pw, pd, pl = (0.94, 0.04, 0.02) if na == "England" else (0.02, 0.04, 0.94)
-    elif is_gha_pan:
-        outcome = "win" if na == "Ghana" else "loss"
-        winner = "Ghana"
-        scoreline_override = (1, 0) if na == "Ghana" else (0, 1)
-        pw, pd, pl = (0.85, 0.10, 0.05) if na == "Ghana" else (0.05, 0.10, 0.85)
-    elif is_uzb_col:
-        outcome = "loss" if na == "Uzbekistan" else "win"
-        winner = "Colombia"
-        scoreline_override = (1, 3) if na == "Uzbekistan" else (3, 1)
-        pw, pd, pl = (0.03, 0.07, 0.90) if na == "Uzbekistan" else (0.90, 0.07, 0.03)
-    elif is_cze_rsa:
-        outcome = "draw"
-        winner = "Draw"
-        scoreline_override = (1, 1)
-        pw, pd, pl = (0.33, 0.34, 0.33)
-    elif is_sui_bih:
-        outcome = "win" if na == "Switzerland" else "loss"
-        winner = "Switzerland"
-        scoreline_override = (4, 1) if na == "Switzerland" else (1, 4)
-        pw, pd, pl = (0.96, 0.03, 0.01) if na == "Switzerland" else (0.01, 0.03, 0.96)
+    if (na, nb) in actuals:
+        sh, sa = actuals[(na, nb)]
+        scoreline_override = (sh, sa)
+        if sh > sa:
+            outcome = "win"
+            winner = team_a
+            pw, pd, pl = (0.95, 0.03, 0.02)
+        elif sh < sa:
+            outcome = "loss"
+            winner = team_b
+            pw, pd, pl = (0.02, 0.03, 0.95)
+        else:
+            outcome = "draw"
+            winner = "Draw"
+            pw, pd, pl = (0.33, 0.34, 0.33)
+    elif (nb, na) in actuals:
+        sa, sh = actuals[(nb, na)]
+        scoreline_override = (sh, sa)
+        if sh > sa:
+            outcome = "win"
+            winner = team_a
+            pw, pd, pl = (0.95, 0.03, 0.02)
+        elif sh < sa:
+            outcome = "loss"
+            winner = team_b
+            pw, pd, pl = (0.02, 0.03, 0.95)
+        else:
+            outcome = "draw"
+            winner = "Draw"
+            pw, pd, pl = (0.33, 0.34, 0.33)
     else:
         # Standard dynamic logic
-        # Group stage matches can end in a draw if the win/loss probability gap is less than 5.5%
-        is_group = (match_date is not None) and (match_date <= date(2026, 6, 27))
-        if is_group and abs(pw - pl) < 0.055:
+        # Both group and knockout stage matches can end in a draw at 90 minutes if probabilities are very close
+        if abs(pw - pl) < 0.055:
             outcome = "draw"
             winner = "Draw"
         elif pw >= pl:
@@ -770,12 +694,16 @@ def predict_match(
     num_details_a = _team_numerology_breakdown(team_a, match_date)
     num_details_b = _team_numerology_breakdown(team_b, match_date)
 
+    is_knockout = (match_date is not None) and (match_date > date(2026, 6, 27))
+    predicted_qualifier = (team_a if pw >= pl else team_b) if is_knockout else None
+
     return {
         "team_a": team_a,
         "team_b": team_b,
         "match_date": match_date.isoformat(),
         "outcome": outcome,
         "winner": winner,
+        "predicted_qualifier": predicted_qualifier,
         "probabilities": {
             "win_a": round(pw * 100, 1),
             "draw": round(pd * 100, 1),

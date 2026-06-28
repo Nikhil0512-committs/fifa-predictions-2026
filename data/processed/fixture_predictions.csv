@@ -1,105 +1,105 @@
-match_number,stage,group_or_label,kickoff_at,venue,city,home_team,away_team,predicted_winner,predicted_score,home_win_probability,draw_probability,away_win_probability,confidence,home_football_strength,away_football_strength,home_astrology_score,away_astrology_score,home_numerology_score,away_numerology_score
-1,Group Stage,Group A,2026-06-11 15:00:00-06,Estadio Azteca,Mexico City,Mexico,South Africa,Mexico,2-0,95.0,3.0,2.0,99.5,0.645,0.358,0.66,0.598,0.614,0.55
-2,Group Stage,Group A,2026-06-11 22:00:00-06,Estadio Akron,Guadalajara,South Korea,Winner UEFA Playoff D,South Korea,2-1,90.0,5.0,5.0,99.5,0.621,0.611,0.781,0.656,0.718,0.606
-3,Group Stage,Group B,2026-06-12 15:00:00-04,BMO Field,Toronto,Canada,Winner UEFA Playoff A,Draw,1-1,33.0,34.0,33.0,99.5,0.536,0.403,0.673,0.689,0.575,0.553
-4,Group Stage,Group D,2026-06-12 21:00:00-07,SoFi Stadium,Los Angeles,USA,Paraguay,United States,4-1,97.0,2.0,1.0,99.5,0.694,0.436,0.688,0.656,0.57,0.63
-5,Group Stage,Group B,2026-06-13 15:00:00-07,Levi's Stadium,San Francisco Bay Area,Qatar,Switzerland,Draw,1-1,33.0,34.0,33.0,99.5,0.466,0.649,0.63,0.594,0.562,0.515
-6,Group Stage,Group C,2026-06-13 18:00:00-04,MetLife Stadium,New York/New Jersey,Brazil,Morocco,Draw,1-1,33.0,34.0,33.0,99.5,0.818,0.745,0.638,0.615,0.523,0.578
-7,Group Stage,Group C,2026-06-13 21:00:00-04,Gillette Stadium,Boston,Haiti,Scotland,Scotland,0-1,5.0,5.0,90.0,99.5,0.241,0.481,0.604,0.571,0.51,0.55
-8,Group Stage,Group D,2026-06-14 00:00:00-07,BC Place,Vancouver,Australia,Winner UEFA Playoff C,Australia,2-0,92.0,5.0,3.0,99.5,0.556,0.571,0.637,0.638,0.726,0.627
-9,Group Stage,Group E,2026-06-14 13:00:00-05,NRG Stadium,Houston,Germany,Curaçao,Germany,7-1,98.0,1.0,1.0,99.5,0.771,0.23,0.616,0.585,0.631,0.641
-10,Group Stage,Group F,2026-06-14 16:00:00-05,AT&T Stadium,Dallas,Netherlands,Japan,Draw,2-2,33.0,34.0,33.0,99.5,0.786,0.702,0.64,0.622,0.551,0.641
-11,Group Stage,Group E,2026-06-14 19:00:00-04,Lincoln Financial Field,Philadelphia,Côte d'Ivoire,Ecuador,Ecuador,1-2,26.6,16.4,57.0,99.5,0.36,0.63,0.5,0.662,0.5,0.574
-12,Group Stage,Group F,2026-06-14 22:00:00-06,Estadio BBVA,Monterrey,Winner UEFA Playoff B,Tunisia,Sweden,5-1,95.0,3.0,2.0,99.5,0.544,0.493,0.629,0.662,0.557,0.786
-13,Group Stage,Group H,2026-06-15 12:00:00-04,Mercedes-Benz Stadium,Atlanta,Spain,Cabo Verde,Draw,0-0,33.0,34.0,33.0,99.5,0.902,0.329,0.657,0.68,0.611,0.677
-14,Group Stage,Group G,2026-06-15 15:00:00-07,Lumen Field,Seattle,Belgium,Egypt,Draw,1-1,33.0,34.0,33.0,99.5,0.779,0.497,0.608,0.703,0.668,0.533
-15,Group Stage,Group H,2026-06-15 18:00:00-04,Hard Rock Stadium,Miami,Saudi Arabia,Uruguay,Draw,1-1,33.0,34.0,33.0,99.5,0.478,0.732,0.639,0.642,0.761,0.541
-16,Group Stage,Group G,2026-06-15 21:00:00-07,SoFi Stadium,Los Angeles,IR Iran,New Zealand,Draw,2-2,33.0,34.0,33.0,99.5,0.55,0.246,0.603,0.69,0.545,0.736
-17,Group Stage,Group I,2026-06-16 15:00:00-04,MetLife Stadium,New York/New Jersey,France,Senegal,France,3-1,90.0,7.0,3.0,99.5,0.909,0.65,0.61,0.67,0.532,0.471
-18,Group Stage,Group I,2026-06-16 18:00:00-04,Gillette Stadium,Boston,Winner FIFA Playoff 2,Norway,Norway,1-4,2.0,3.0,95.0,99.5,0.488,0.637,0.599,0.549,0.494,0.632
-19,Group Stage,Group J,2026-06-16 21:00:00-05,Arrowhead Stadium,Kansas City,Argentina,Algeria,Argentina,3-0,97.0,2.0,1.0,99.5,0.943,0.574,0.591,0.57,0.546,0.592
-20,Group Stage,Group J,2026-06-17 00:00:00-07,Levi's Stadium,San Francisco Bay Area,Austria,Jordan,Austria,3-1,92.0,5.0,3.0,99.5,0.614,0.352,0.63,0.555,0.615,0.567
-21,Group Stage,Group K,2026-06-17 13:00:00-05,NRG Stadium,Houston,Portugal,Winner FIFA Playoff 1,Draw,1-1,33.0,34.0,33.0,99.5,0.834,0.422,0.655,0.603,0.581,0.612
-22,Group Stage,Group L,2026-06-17 16:00:00-05,AT&T Stadium,Dallas,England,Croatia,England,4-2,94.0,4.0,2.0,99.5,0.884,0.683,0.625,0.634,0.594,0.58
-23,Group Stage,Group L,2026-06-17 19:00:00-04,BMO Field,Toronto,Ghana,Panama,Ghana,1-0,85.0,10.0,5.0,99.5,0.415,0.329,0.623,0.594,0.586,0.497
-24,Group Stage,Group K,2026-06-17 22:00:00-06,Estadio Azteca,Mexico City,Uzbekistan,Colombia,Colombia,1-3,3.0,7.0,90.0,99.5,0.345,0.738,0.602,0.601,0.603,0.611
-25,Group Stage,Group A,2026-06-18 12:00:00-04,Mercedes-Benz Stadium,Atlanta,Winner UEFA Playoff D,South Africa,Draw,1-1,33.0,34.0,33.0,99.5,0.611,0.358,0.656,0.598,0.579,0.409
-26,Group Stage,Group B,2026-06-18 15:00:00-07,SoFi Stadium,Los Angeles,Switzerland,Winner UEFA Playoff A,Switzerland,4-1,96.0,3.0,1.0,99.5,0.649,0.403,0.661,0.689,0.411,0.588
-27,Group Stage,Group B,2026-06-18 18:00:00-07,BC Place,Vancouver,Canada,Qatar,Draw,2-2,42.7,19.1,38.2,70.4,0.536,0.466,0.695,0.68,0.483,0.552
-28,Group Stage,Group A,2026-06-18 21:00:00-06,Estadio Akron,Guadalajara,Mexico,South Korea,Draw,3-3,41.7,19.1,39.3,67.9,0.645,0.621,0.66,0.781,0.682,0.524
-29,Group Stage,Group D,2026-06-19 15:00:00-07,Lumen Field,Seattle,USA,Australia,United States,3-1,45.2,18.5,36.3,75.7,0.694,0.556,0.688,0.629,0.633,0.533
-30,Group Stage,Group C,2026-06-19 18:00:00-04,Gillette Stadium,Boston,Scotland,Morocco,Morocco,0-2,28.1,17.4,54.5,96.8,0.481,0.745,0.576,0.703,0.604,0.617
-31,Group Stage,Group C,2026-06-19 21:00:00-04,Lincoln Financial Field,Philadelphia,Brazil,Haiti,Brazil,3-2,47.6,17.6,34.8,80.4,0.818,0.241,0.64,0.654,0.59,0.752
-32,Group Stage,Group D,2026-06-20 00:00:00-07,Levi's Stadium,San Francisco Bay Area,Winner UEFA Playoff C,Paraguay,Turkey,3-1,44.1,19.3,36.6,74.0,0.571,0.436,0.588,0.665,0.584,0.605
-33,Group Stage,Group F,2026-06-20 13:00:00-05,NRG Stadium,Houston,Netherlands,Winner UEFA Playoff B,Netherlands,3-2,48.9,17.7,33.4,83.6,0.786,0.544,0.572,0.623,0.614,0.586
-34,Group Stage,Group E,2026-06-20 16:00:00-04,BMO Field,Toronto,Germany,Côte d'Ivoire,Germany,3-1,60.7,15.6,23.7,99.5,0.771,0.36,0.615,0.5,0.675,0.5
-35,Group Stage,Group E,2026-06-20 20:00:00-05,Arrowhead Stadium,Kansas City,Ecuador,Curaçao,Ecuador,3-0,58.8,16.1,25.1,99.5,0.63,0.23,0.64,0.606,0.624,0.55
-36,Group Stage,Group F,2026-06-21 00:00:00-06,Estadio BBVA,Monterrey,Tunisia,Japan,Japan,0-1,33.4,18.1,48.6,83.2,0.493,0.702,0.662,0.622,0.55,0.504
-37,Group Stage,Group H,2026-06-21 12:00:00-04,Mercedes-Benz Stadium,Atlanta,Spain,Saudi Arabia,Spain,2-1,52.9,17.4,29.7,92.9,0.902,0.478,0.698,0.639,0.572,0.642
-38,Group Stage,Group G,2026-06-21 15:00:00-07,SoFi Stadium,Los Angeles,Belgium,IR Iran,Belgium,4-2,46.1,18.3,35.6,77.6,0.779,0.55,0.632,0.652,0.597,0.627
-39,Group Stage,Group H,2026-06-21 18:00:00-04,Hard Rock Stadium,Miami,Uruguay,Cabo Verde,Uruguay,3-1,49.7,18.4,31.9,86.3,0.732,0.329,0.721,0.638,0.49,0.63
-40,Group Stage,Group G,2026-06-21 21:00:00-07,BC Place,Vancouver,New Zealand,Egypt,Egypt,2-3,35.7,18.7,45.6,77.0,0.246,0.497,0.639,0.639,0.67,0.549
-41,Group Stage,Group J,2026-06-22 13:00:00-05,AT&T Stadium,Dallas,Argentina,Austria,Argentina,3-2,49.4,18.1,32.5,85.3,0.943,0.614,0.717,0.686,0.603,0.593
-42,Group Stage,Group I,2026-06-22 17:00:00-04,Lincoln Financial Field,Philadelphia,France,Winner FIFA Playoff 2,France,2-0,49.8,18.0,32.3,86.0,0.909,0.488,0.678,0.673,0.521,0.564
-43,Group Stage,Group I,2026-06-22 20:00:00-04,MetLife Stadium,New York/New Jersey,Norway,Senegal,Draw,1-1,40.1,19.2,40.7,65.8,0.637,0.65,0.659,0.694,0.598,0.496
-44,Group Stage,Group J,2026-06-22 23:00:00-07,Levi's Stadium,San Francisco Bay Area,Jordan,Algeria,Algeria,1-2,33.9,18.1,47.9,81.8,0.352,0.574,0.665,0.621,0.672,0.548
-45,Group Stage,Group K,2026-06-23 13:00:00-05,NRG Stadium,Houston,Portugal,Uzbekistan,Portugal,2-1,52.1,17.8,30.2,91.3,0.834,0.345,0.676,0.706,0.561,0.516
-46,Group Stage,Group L,2026-06-23 16:00:00-04,Gillette Stadium,Boston,England,Ghana,England,3-1,53.6,17.7,28.7,94.8,0.884,0.415,0.671,0.642,0.561,0.598
-47,Group Stage,Group L,2026-06-23 19:00:00-04,BMO Field,Toronto,Panama,Croatia,Croatia,1-2,31.2,17.9,50.9,88.7,0.329,0.683,0.71,0.662,0.466,0.656
-48,Group Stage,Group K,2026-06-23 22:00:00-06,Estadio Akron,Guadalajara,Colombia,Winner FIFA Playoff 1,Colombia,2-0,51.4,18.4,30.2,90.5,0.738,0.422,0.646,0.706,0.692,0.457
-49,Group Stage,Group B,2026-06-24 15:00:00-07,BC Place,Vancouver,Switzerland,Canada,Switzerland,3-1,44.0,19.1,36.9,73.6,0.649,0.536,0.623,0.631,0.661,0.653
-50,Group Stage,Group B,2026-06-24 15:00:00-07,Lumen Field,Seattle,Winner UEFA Playoff A,Qatar,Qatar,2-3,35.8,19.1,45.1,76.1,0.403,0.466,0.654,0.69,0.511,0.55
-51,Group Stage,Group C,2026-06-24 18:00:00-04,Hard Rock Stadium,Miami,Scotland,Brazil,Brazil,1-2,31.1,17.9,51.1,89.0,0.481,0.818,0.586,0.646,0.629,0.599
-52,Group Stage,Group C,2026-06-24 18:00:00-04,Mercedes-Benz Stadium,Atlanta,Morocco,Haiti,Morocco,3-2,50.6,17.8,31.7,87.7,0.745,0.241,0.668,0.736,0.648,0.72
-53,Group Stage,Group A,2026-06-24 21:00:00-06,Estadio Azteca,Mexico City,Winner UEFA Playoff D,Mexico,Draw,2-2,38.7,18.3,43.0,70.2,0.611,0.645,0.695,0.725,0.584,0.471
-54,Group Stage,Group A,2026-06-24 21:00:00-06,Estadio BBVA,Monterrey,South Africa,South Korea,South Korea,1-3,35.9,18.2,45.9,76.9,0.358,0.621,0.672,0.664,0.724,0.502
-55,Group Stage,Group E,2026-06-25 16:00:00-04,Lincoln Financial Field,Philadelphia,Curaçao,Côte d'Ivoire,Côte d'Ivoire,0-2,36.9,17.2,45.8,75.7,0.23,0.36,0.631,0.5,0.707,0.5
-56,Group Stage,Group E,2026-06-25 16:00:00-04,MetLife Stadium,New York/New Jersey,Ecuador,Germany,Draw,3-3,40.0,18.7,41.3,66.6,0.63,0.771,0.811,0.638,0.579,0.387
-57,Group Stage,Group F,2026-06-25 19:00:00-05,AT&T Stadium,Dallas,Japan,Winner UEFA Playoff B,Japan,2-1,48.1,17.7,34.2,81.7,0.702,0.544,0.665,0.592,0.446,0.563
-58,Group Stage,Group F,2026-06-25 19:00:00-05,Arrowhead Stadium,Kansas City,Tunisia,Netherlands,Netherlands,2-3,33.4,18.0,48.6,83.2,0.493,0.786,0.79,0.668,0.55,0.589
-59,Group Stage,Group D,2026-06-25 22:00:00-07,SoFi Stadium,Los Angeles,Winner UEFA Playoff C,USA,United States,2-3,38.0,18.2,43.7,71.9,0.571,0.694,0.735,0.701,0.482,0.42
-60,Group Stage,Group D,2026-06-25 22:00:00-07,Levi's Stadium,San Francisco Bay Area,Paraguay,Australia,Australia,0-1,34.4,19.3,46.3,79.3,0.436,0.556,0.665,0.592,0.545,0.598
-61,Group Stage,Group I,2026-06-26 15:00:00-04,Gillette Stadium,Boston,Norway,France,France,1-2,35.1,18.0,46.9,79.2,0.637,0.909,0.599,0.634,0.593,0.628
-62,Group Stage,Group I,2026-06-26 15:00:00-04,BMO Field,Toronto,Senegal,Winner FIFA Playoff 2,Senegal,2-1,47.8,19.0,33.2,82.5,0.65,0.488,0.691,0.616,0.589,0.617
-63,Group Stage,Group H,2026-06-26 20:00:00-05,NRG Stadium,Houston,Cabo Verde,Saudi Arabia,Saudi Arabia,2-3,35.3,19.2,45.4,77.1,0.329,0.478,0.638,0.711,0.678,0.577
-64,Group Stage,Group H,2026-06-26 20:00:00-06,Estadio Akron,Guadalajara,Uruguay,Spain,Spain,1-3,34.6,18.7,46.7,79.5,0.732,0.902,0.642,0.622,0.657,0.619
-65,Group Stage,Group G,2026-06-26 23:00:00-07,Lumen Field,Seattle,Egypt,IR Iran,Draw,2-2,39.0,19.2,41.7,68.2,0.497,0.55,0.68,0.635,0.65,0.58
-66,Group Stage,Group G,2026-06-26 23:00:00-07,BC Place,Vancouver,New Zealand,Belgium,Belgium,2-3,31.6,17.7,50.7,87.9,0.246,0.779,0.68,0.638,0.6,0.626
-67,Group Stage,Group L,2026-06-27 17:00:00-04,MetLife Stadium,New York/New Jersey,Panama,England,England,0-1,30.7,17.7,51.6,90.0,0.329,0.884,0.594,0.598,0.618,0.528
-68,Group Stage,Group L,2026-06-27 17:00:00-04,Lincoln Financial Field,Philadelphia,Croatia,Ghana,Croatia,3-1,49.8,18.3,31.9,86.5,0.683,0.415,0.628,0.634,0.584,0.59
-69,Group Stage,Group K,2026-06-27 19:30:00-04,Hard Rock Stadium,Miami,Colombia,Portugal,Portugal,2-3,37.1,19.1,43.8,73.0,0.738,0.834,0.623,0.616,0.577,0.536
-70,Group Stage,Group K,2026-06-27 19:30:00-04,Mercedes-Benz Stadium,Atlanta,Winner FIFA Playoff 1,Uzbekistan,Draw,0-0,41.5,20.3,38.2,69.0,0.422,0.345,0.603,0.602,0.581,0.543
-71,Group Stage,Group J,2026-06-27 22:00:00-05,Arrowhead Stadium,Kansas City,Algeria,Austria,Draw,3-3,41.4,19.2,39.4,67.4,0.574,0.614,0.595,0.576,0.663,0.545
-72,Group Stage,Group J,2026-06-27 22:00:00-05,AT&T Stadium,Dallas,Jordan,Argentina,Argentina,1-3,29.9,17.6,52.6,92.2,0.352,0.943,0.673,0.629,0.621,0.564
-73,Round of 32,2A vs 2B,2026-06-28 15:00:00-07,SoFi Stadium,Los Angeles,2A,2B,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-74,Round of 32,1C vs 2F,2026-06-29 13:00:00-05,NRG Stadium,Houston,1C,2F,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-75,Round of 32,1E vs 3ABCDF,2026-06-29 16:30:00-04,Gillette Stadium,Boston,1E,3ABCDF,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-76,Round of 32,1F vs 2C,2026-06-29 21:00:00-06,Estadio BBVA,Monterrey,1F,2C,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-77,Round of 32,2E vs 2I,2026-06-30 13:00:00-05,AT&T Stadium,Dallas,2E,2I,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-78,Round of 32,1I vs 3CDFGH,2026-06-30 17:00:00-04,MetLife Stadium,New York/New Jersey,1I,3CDFGH,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-79,Round of 32,1A vs 3CEFHI,2026-06-30 21:00:00-06,Estadio Azteca,Mexico City,1A,3CEFHI,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-80,Round of 32,1L vs 3EHIJK,2026-07-01 12:00:00-04,Mercedes-Benz Stadium,Atlanta,1L,3EHIJK,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-81,Round of 32,1G vs 3AEHIJ,2026-07-01 16:00:00-07,Lumen Field,Seattle,1G,3AEHIJ,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-82,Round of 32,1D vs 3BEFIJ,2026-07-01 20:00:00-07,Levi's Stadium,San Francisco Bay Area,1D,3BEFIJ,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-83,Round of 32,1H vs 2J,2026-07-02 15:00:00-07,SoFi Stadium,Los Angeles,1H,2J,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-84,Round of 32,2K vs 2L,2026-07-02 19:00:00-04,BMO Field,Toronto,2K,2L,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-85,Round of 32,1B vs 3EFGIJ,2026-07-02 23:00:00-07,BC Place,Vancouver,1B,3EFGIJ,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-86,Round of 32,2D vs 2G,2026-07-03 14:00:00-05,AT&T Stadium,Dallas,2D,2G,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-87,Round of 32,1J vs 2H,2026-07-03 18:00:00-04,Hard Rock Stadium,Miami,1J,2H,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-88,Round of 32,1K vs 3DEIJL,2026-07-03 21:30:00-05,Arrowhead Stadium,Kansas City,1K,3DEIJL,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-89,Round of 16,W73 vs W75,2026-07-04 13:00:00-05,NRG Stadium,Houston,W73,W75,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-90,Round of 16,W74 vs W77,2026-07-04 17:00:00-04,Lincoln Financial Field,Philadelphia,W74,W77,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-91,Round of 16,W76 vs W78,2026-07-05 16:00:00-04,MetLife Stadium,New York/New Jersey,W76,W78,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-92,Round of 16,W79 vs W80,2026-07-05 20:00:00-06,Estadio Azteca,Mexico City,W79,W80,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-93,Round of 16,W83 vs W84,2026-07-06 15:00:00-05,AT&T Stadium,Dallas,W83,W84,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-94,Round of 16,W81 vs W82,2026-07-06 20:00:00-07,Lumen Field,Seattle,W81,W82,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-95,Round of 16,W86 vs W88,2026-07-07 12:00:00-04,Mercedes-Benz Stadium,Atlanta,W86,W88,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-96,Round of 16,W85 vs W87,2026-07-07 16:00:00-07,BC Place,Vancouver,W85,W87,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-97,Quarterfinals,W89 vs W90,2026-07-09 16:00:00-04,Gillette Stadium,Boston,W89,W90,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-98,Quarterfinals,W93 vs W94,2026-07-10 15:00:00-07,SoFi Stadium,Los Angeles,W93,W94,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-99,Quarterfinals,W91 vs W92,2026-07-11 17:00:00-04,Hard Rock Stadium,Miami,W91,W92,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-100,Quarterfinals,W95 vs W100,2026-07-11 21:00:00-05,Arrowhead Stadium,Kansas City,W95,W100,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-101,Semifinals,W97 vs W98,2026-07-14 15:00:00-05,AT&T Stadium,Dallas,W97,W98,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-102,Semifinals,W99 vs W100,2026-07-15 15:00:00-04,Mercedes-Benz Stadium,Atlanta,W99,W100,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-103,Third Place Playoff,RU101 vs RU102,2026-07-18 17:00:00-04,Hard Rock Stadium,Miami,RU101,RU102,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
-104,Final,W101 vs W102,2026-07-19 15:00:00-04,MetLife Stadium,New York/New Jersey,W101,W102,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5
+match_number,stage,group_or_label,kickoff_at,venue,city,home_team,away_team,predicted_winner,predicted_score,home_win_probability,draw_probability,away_win_probability,confidence,home_football_strength,away_football_strength,home_astrology_score,away_astrology_score,home_numerology_score,away_numerology_score,predicted_qualifier
+1,Group Stage,Group A,2026-06-11 15:00:00-06,Estadio Azteca,Mexico City,Mexico,South Africa,Mexico,2-0,95.0,3.0,2.0,99.5,0.645,0.358,0.66,0.598,0.614,0.55,
+2,Group Stage,Group A,2026-06-11 22:00:00-06,Estadio Akron,Guadalajara,South Korea,Winner UEFA Playoff D,South Korea,2-1,95.0,3.0,2.0,99.5,0.621,0.611,0.781,0.656,0.718,0.606,
+3,Group Stage,Group B,2026-06-12 15:00:00-04,BMO Field,Toronto,Canada,Winner UEFA Playoff A,Draw,1-1,33.0,34.0,33.0,99.5,0.536,0.403,0.673,0.689,0.575,0.553,
+4,Group Stage,Group D,2026-06-12 21:00:00-07,SoFi Stadium,Los Angeles,USA,Paraguay,United States,4-1,95.0,3.0,2.0,99.5,0.694,0.436,0.688,0.656,0.57,0.63,
+5,Group Stage,Group B,2026-06-13 15:00:00-07,Levi's Stadium,San Francisco Bay Area,Qatar,Switzerland,Draw,1-1,33.0,34.0,33.0,99.5,0.466,0.649,0.63,0.594,0.562,0.515,
+6,Group Stage,Group C,2026-06-13 18:00:00-04,MetLife Stadium,New York/New Jersey,Brazil,Morocco,Draw,1-1,33.0,34.0,33.0,99.5,0.818,0.745,0.638,0.615,0.523,0.578,
+7,Group Stage,Group C,2026-06-13 21:00:00-04,Gillette Stadium,Boston,Haiti,Scotland,Scotland,0-1,2.0,3.0,95.0,99.5,0.241,0.481,0.604,0.571,0.51,0.55,
+8,Group Stage,Group D,2026-06-14 00:00:00-07,BC Place,Vancouver,Australia,Winner UEFA Playoff C,Australia,2-0,95.0,3.0,2.0,99.5,0.556,0.571,0.637,0.638,0.726,0.627,
+9,Group Stage,Group E,2026-06-14 13:00:00-05,NRG Stadium,Houston,Germany,Curaçao,Germany,7-1,95.0,3.0,2.0,99.5,0.771,0.23,0.616,0.585,0.631,0.641,
+10,Group Stage,Group F,2026-06-14 16:00:00-05,AT&T Stadium,Dallas,Netherlands,Japan,Draw,2-2,33.0,34.0,33.0,99.5,0.786,0.702,0.64,0.622,0.551,0.641,
+11,Group Stage,Group E,2026-06-14 19:00:00-04,Lincoln Financial Field,Philadelphia,Côte d'Ivoire,Ecuador,Ecuador,1-2,26.6,16.4,57.0,99.5,0.36,0.63,0.5,0.662,0.5,0.574,
+12,Group Stage,Group F,2026-06-14 22:00:00-06,Estadio BBVA,Monterrey,Winner UEFA Playoff B,Tunisia,Sweden,5-1,95.0,3.0,2.0,99.5,0.544,0.493,0.629,0.662,0.557,0.786,
+13,Group Stage,Group H,2026-06-15 12:00:00-04,Mercedes-Benz Stadium,Atlanta,Spain,Cabo Verde,Draw,0-0,33.0,34.0,33.0,99.5,0.902,0.329,0.657,0.68,0.611,0.677,
+14,Group Stage,Group G,2026-06-15 15:00:00-07,Lumen Field,Seattle,Belgium,Egypt,Draw,1-1,33.0,34.0,33.0,99.5,0.779,0.497,0.608,0.703,0.668,0.533,
+15,Group Stage,Group H,2026-06-15 18:00:00-04,Hard Rock Stadium,Miami,Saudi Arabia,Uruguay,Draw,1-1,33.0,34.0,33.0,99.5,0.478,0.732,0.639,0.642,0.761,0.541,
+16,Group Stage,Group G,2026-06-15 21:00:00-07,SoFi Stadium,Los Angeles,IR Iran,New Zealand,Draw,2-2,33.0,34.0,33.0,99.5,0.55,0.246,0.603,0.69,0.545,0.736,
+17,Group Stage,Group I,2026-06-16 15:00:00-04,MetLife Stadium,New York/New Jersey,France,Senegal,France,3-1,95.0,3.0,2.0,99.5,0.909,0.65,0.61,0.67,0.532,0.471,
+18,Group Stage,Group I,2026-06-16 18:00:00-04,Gillette Stadium,Boston,Winner FIFA Playoff 2,Norway,Norway,1-4,2.0,3.0,95.0,99.5,0.488,0.637,0.599,0.549,0.494,0.632,
+19,Group Stage,Group J,2026-06-16 21:00:00-05,Arrowhead Stadium,Kansas City,Argentina,Algeria,Argentina,3-0,95.0,3.0,2.0,99.5,0.943,0.574,0.591,0.57,0.546,0.592,
+20,Group Stage,Group J,2026-06-17 00:00:00-07,Levi's Stadium,San Francisco Bay Area,Austria,Jordan,Austria,3-1,95.0,3.0,2.0,99.5,0.614,0.352,0.63,0.555,0.615,0.567,
+21,Group Stage,Group K,2026-06-17 13:00:00-05,NRG Stadium,Houston,Portugal,Winner FIFA Playoff 1,Draw,1-1,33.0,34.0,33.0,99.5,0.834,0.422,0.655,0.603,0.581,0.612,
+22,Group Stage,Group L,2026-06-17 16:00:00-05,AT&T Stadium,Dallas,England,Croatia,England,4-2,95.0,3.0,2.0,99.5,0.884,0.683,0.625,0.634,0.594,0.58,
+23,Group Stage,Group L,2026-06-17 19:00:00-04,BMO Field,Toronto,Ghana,Panama,Ghana,1-0,95.0,3.0,2.0,99.5,0.415,0.329,0.623,0.594,0.586,0.497,
+24,Group Stage,Group K,2026-06-17 22:00:00-06,Estadio Azteca,Mexico City,Uzbekistan,Colombia,Colombia,1-3,2.0,3.0,95.0,99.5,0.345,0.738,0.602,0.601,0.603,0.611,
+25,Group Stage,Group A,2026-06-18 12:00:00-04,Mercedes-Benz Stadium,Atlanta,Winner UEFA Playoff D,South Africa,Draw,1-1,33.0,34.0,33.0,99.5,0.611,0.358,0.656,0.598,0.579,0.409,
+26,Group Stage,Group B,2026-06-18 15:00:00-07,SoFi Stadium,Los Angeles,Switzerland,Winner UEFA Playoff A,Switzerland,4-1,95.0,3.0,2.0,99.5,0.649,0.403,0.661,0.689,0.411,0.588,
+27,Group Stage,Group B,2026-06-18 18:00:00-07,BC Place,Vancouver,Canada,Qatar,Canada,6-0,95.0,3.0,2.0,99.5,0.536,0.466,0.695,0.68,0.483,0.552,
+28,Group Stage,Group A,2026-06-18 21:00:00-06,Estadio Akron,Guadalajara,Mexico,South Korea,Mexico,1-0,95.0,3.0,2.0,99.5,0.645,0.621,0.66,0.781,0.682,0.524,
+29,Group Stage,Group D,2026-06-19 15:00:00-07,Lumen Field,Seattle,USA,Australia,United States,2-0,95.0,3.0,2.0,99.5,0.694,0.556,0.688,0.629,0.633,0.533,
+30,Group Stage,Group C,2026-06-19 18:00:00-04,Gillette Stadium,Boston,Scotland,Morocco,Morocco,0-1,2.0,3.0,95.0,99.5,0.481,0.745,0.576,0.703,0.604,0.617,
+31,Group Stage,Group C,2026-06-19 21:00:00-04,Lincoln Financial Field,Philadelphia,Brazil,Haiti,Brazil,3-0,95.0,3.0,2.0,99.5,0.818,0.241,0.64,0.654,0.59,0.752,
+32,Group Stage,Group D,2026-06-20 00:00:00-07,Levi's Stadium,San Francisco Bay Area,Winner UEFA Playoff C,Paraguay,Paraguay,0-1,2.0,3.0,95.0,99.5,0.571,0.436,0.588,0.665,0.584,0.605,
+33,Group Stage,Group F,2026-06-20 13:00:00-05,NRG Stadium,Houston,Netherlands,Winner UEFA Playoff B,Netherlands,5-1,95.0,3.0,2.0,99.5,0.786,0.544,0.572,0.623,0.614,0.586,
+34,Group Stage,Group E,2026-06-20 16:00:00-04,BMO Field,Toronto,Germany,Côte d'Ivoire,Germany,3-1,60.7,15.6,23.7,99.5,0.771,0.36,0.615,0.5,0.675,0.5,
+35,Group Stage,Group E,2026-06-20 20:00:00-05,Arrowhead Stadium,Kansas City,Ecuador,Curaçao,Draw,0-0,33.0,34.0,33.0,99.5,0.63,0.23,0.64,0.606,0.624,0.55,
+36,Group Stage,Group F,2026-06-21 00:00:00-06,Estadio BBVA,Monterrey,Tunisia,Japan,Japan,0-4,2.0,3.0,95.0,99.5,0.493,0.702,0.662,0.622,0.55,0.504,
+37,Group Stage,Group H,2026-06-21 12:00:00-04,Mercedes-Benz Stadium,Atlanta,Spain,Saudi Arabia,Spain,4-0,95.0,3.0,2.0,99.5,0.902,0.478,0.698,0.639,0.572,0.642,
+38,Group Stage,Group G,2026-06-21 15:00:00-07,SoFi Stadium,Los Angeles,Belgium,IR Iran,Draw,0-0,33.0,34.0,33.0,99.5,0.779,0.55,0.632,0.652,0.597,0.627,
+39,Group Stage,Group H,2026-06-21 18:00:00-04,Hard Rock Stadium,Miami,Uruguay,Cabo Verde,Draw,2-2,33.0,34.0,33.0,99.5,0.732,0.329,0.721,0.638,0.49,0.63,
+40,Group Stage,Group G,2026-06-21 21:00:00-07,BC Place,Vancouver,New Zealand,Egypt,Egypt,1-3,2.0,3.0,95.0,99.5,0.246,0.497,0.639,0.639,0.67,0.549,
+41,Group Stage,Group J,2026-06-22 13:00:00-05,AT&T Stadium,Dallas,Argentina,Austria,Argentina,2-0,95.0,3.0,2.0,99.5,0.943,0.614,0.717,0.686,0.603,0.593,
+42,Group Stage,Group I,2026-06-22 17:00:00-04,Lincoln Financial Field,Philadelphia,France,Winner FIFA Playoff 2,France,3-0,95.0,3.0,2.0,99.5,0.909,0.488,0.678,0.673,0.521,0.564,
+43,Group Stage,Group I,2026-06-22 20:00:00-04,MetLife Stadium,New York/New Jersey,Norway,Senegal,Norway,3-2,95.0,3.0,2.0,99.5,0.637,0.65,0.659,0.694,0.598,0.496,
+44,Group Stage,Group J,2026-06-22 23:00:00-07,Levi's Stadium,San Francisco Bay Area,Jordan,Algeria,Algeria,1-2,2.0,3.0,95.0,99.5,0.352,0.574,0.665,0.621,0.672,0.548,
+45,Group Stage,Group K,2026-06-23 13:00:00-05,NRG Stadium,Houston,Portugal,Uzbekistan,Portugal,5-0,95.0,3.0,2.0,99.5,0.834,0.345,0.676,0.706,0.561,0.516,
+46,Group Stage,Group L,2026-06-23 16:00:00-04,Gillette Stadium,Boston,England,Ghana,Draw,0-0,33.0,34.0,33.0,99.5,0.884,0.415,0.671,0.642,0.561,0.598,
+47,Group Stage,Group L,2026-06-23 19:00:00-04,BMO Field,Toronto,Panama,Croatia,Croatia,0-1,2.0,3.0,95.0,99.5,0.329,0.683,0.71,0.662,0.466,0.656,
+48,Group Stage,Group K,2026-06-23 22:00:00-06,Estadio Akron,Guadalajara,Colombia,Winner FIFA Playoff 1,Colombia,1-0,95.0,3.0,2.0,99.5,0.738,0.422,0.646,0.706,0.692,0.457,
+49,Group Stage,Group B,2026-06-24 15:00:00-07,BC Place,Vancouver,Switzerland,Canada,Switzerland,2-1,95.0,3.0,2.0,99.5,0.649,0.536,0.623,0.631,0.661,0.653,
+50,Group Stage,Group B,2026-06-24 15:00:00-07,Lumen Field,Seattle,Winner UEFA Playoff A,Qatar,Bosnia and Herzegovina,3-1,95.0,3.0,2.0,99.5,0.403,0.466,0.654,0.69,0.511,0.55,
+51,Group Stage,Group C,2026-06-24 18:00:00-04,Hard Rock Stadium,Miami,Scotland,Brazil,Brazil,0-3,2.0,3.0,95.0,99.5,0.481,0.818,0.586,0.646,0.629,0.599,
+52,Group Stage,Group C,2026-06-24 18:00:00-04,Mercedes-Benz Stadium,Atlanta,Morocco,Haiti,Morocco,4-2,95.0,3.0,2.0,99.5,0.745,0.241,0.668,0.736,0.648,0.72,
+53,Group Stage,Group A,2026-06-24 21:00:00-06,Estadio Azteca,Mexico City,Winner UEFA Playoff D,Mexico,Mexico,0-3,2.0,3.0,95.0,99.5,0.611,0.645,0.695,0.725,0.584,0.471,
+54,Group Stage,Group A,2026-06-24 21:00:00-06,Estadio BBVA,Monterrey,South Africa,South Korea,South Africa,1-0,95.0,3.0,2.0,99.5,0.358,0.621,0.672,0.664,0.724,0.502,
+55,Group Stage,Group E,2026-06-25 16:00:00-04,Lincoln Financial Field,Philadelphia,Curaçao,Côte d'Ivoire,Côte d'Ivoire,0-2,36.9,17.2,45.8,75.7,0.23,0.36,0.631,0.5,0.707,0.5,
+56,Group Stage,Group E,2026-06-25 16:00:00-04,MetLife Stadium,New York/New Jersey,Ecuador,Germany,Ecuador,2-1,95.0,3.0,2.0,99.5,0.63,0.771,0.811,0.638,0.579,0.387,
+57,Group Stage,Group F,2026-06-25 19:00:00-05,AT&T Stadium,Dallas,Japan,Winner UEFA Playoff B,Draw,1-1,33.0,34.0,33.0,99.5,0.702,0.544,0.665,0.592,0.446,0.563,
+58,Group Stage,Group F,2026-06-25 19:00:00-05,Arrowhead Stadium,Kansas City,Tunisia,Netherlands,Netherlands,1-3,2.0,3.0,95.0,99.5,0.493,0.786,0.79,0.668,0.55,0.589,
+59,Group Stage,Group D,2026-06-25 22:00:00-07,SoFi Stadium,Los Angeles,Winner UEFA Playoff C,USA,Turkey,3-2,95.0,3.0,2.0,99.5,0.571,0.694,0.735,0.701,0.482,0.42,
+60,Group Stage,Group D,2026-06-25 22:00:00-07,Levi's Stadium,San Francisco Bay Area,Paraguay,Australia,Draw,0-0,33.0,34.0,33.0,99.5,0.436,0.556,0.665,0.592,0.545,0.598,
+61,Group Stage,Group I,2026-06-26 15:00:00-04,Gillette Stadium,Boston,Norway,France,France,1-4,2.0,3.0,95.0,99.5,0.637,0.909,0.599,0.634,0.593,0.628,
+62,Group Stage,Group I,2026-06-26 15:00:00-04,BMO Field,Toronto,Senegal,Winner FIFA Playoff 2,Senegal,5-0,95.0,3.0,2.0,99.5,0.65,0.488,0.691,0.616,0.589,0.617,
+63,Group Stage,Group H,2026-06-26 20:00:00-05,NRG Stadium,Houston,Cabo Verde,Saudi Arabia,Draw,0-0,33.0,34.0,33.0,99.5,0.329,0.478,0.638,0.711,0.678,0.577,
+64,Group Stage,Group H,2026-06-26 20:00:00-06,Estadio Akron,Guadalajara,Uruguay,Spain,Spain,0-1,2.0,3.0,95.0,99.5,0.732,0.902,0.642,0.622,0.657,0.619,
+65,Group Stage,Group G,2026-06-26 23:00:00-07,Lumen Field,Seattle,Egypt,IR Iran,Draw,1-1,33.0,34.0,33.0,99.5,0.497,0.55,0.68,0.635,0.65,0.58,
+66,Group Stage,Group G,2026-06-26 23:00:00-07,BC Place,Vancouver,New Zealand,Belgium,Belgium,1-5,2.0,3.0,95.0,99.5,0.246,0.779,0.68,0.638,0.6,0.626,
+67,Group Stage,Group L,2026-06-27 17:00:00-04,MetLife Stadium,New York/New Jersey,Panama,England,England,0-2,2.0,3.0,95.0,99.5,0.329,0.884,0.594,0.598,0.618,0.528,
+68,Group Stage,Group L,2026-06-27 17:00:00-04,Lincoln Financial Field,Philadelphia,Croatia,Ghana,Croatia,2-1,95.0,3.0,2.0,99.5,0.683,0.415,0.628,0.634,0.584,0.59,
+69,Group Stage,Group K,2026-06-27 19:30:00-04,Hard Rock Stadium,Miami,Colombia,Portugal,Draw,0-0,33.0,34.0,33.0,99.5,0.738,0.834,0.623,0.616,0.577,0.536,
+70,Group Stage,Group K,2026-06-27 19:30:00-04,Mercedes-Benz Stadium,Atlanta,Winner FIFA Playoff 1,Uzbekistan,DR Congo,3-1,95.0,3.0,2.0,99.5,0.422,0.345,0.603,0.602,0.581,0.543,
+71,Group Stage,Group J,2026-06-27 22:00:00-05,Arrowhead Stadium,Kansas City,Algeria,Austria,Draw,3-3,33.0,34.0,33.0,99.5,0.574,0.614,0.595,0.576,0.663,0.545,
+72,Group Stage,Group J,2026-06-27 22:00:00-05,AT&T Stadium,Dallas,Jordan,Argentina,Argentina,1-3,2.0,3.0,95.0,99.5,0.352,0.943,0.673,0.629,0.621,0.564,
+73,Round of 32,2A vs 2B,2026-06-28 15:00:00-07,SoFi Stadium,Los Angeles,Canada,South Africa,Canada,2-1,44.4,19.1,36.5,74.5,0.536,0.358,0.621,0.663,0.623,0.67,Canada
+74,Round of 32,1C vs 2F,2026-06-29 13:00:00-05,NRG Stadium,Houston,Brazil,Japan,Brazil,3-2,45.8,18.5,35.7,77.0,0.818,0.702,0.646,0.676,0.693,0.684,Brazil
+75,Round of 32,1E vs 3ABCDF,2026-06-29 16:30:00-04,Gillette Stadium,Boston,Germany,Paraguay,Germany,2-0,44.9,18.3,36.8,74.6,0.771,0.436,0.644,0.656,0.675,0.605,Germany
+76,Round of 32,1F vs 2C,2026-06-29 21:00:00-06,Estadio BBVA,Monterrey,Netherlands,Morocco,Netherlands,2-1,45.4,19.3,35.3,77.1,0.786,0.745,0.622,0.665,0.614,0.636,Netherlands
+77,Round of 32,2E vs 2I,2026-06-30 13:00:00-05,AT&T Stadium,Dallas,Ivory Coast,Norway,Draw,3-3,42.1,18.5,39.5,68.1,0.464,0.637,0.578,0.549,0.585,0.527,Ivory Coast
+78,Round of 32,1I vs 3CDFGH,2026-06-30 17:00:00-04,MetLife Stadium,New York/New Jersey,France,Sweden,France,4-1,44.6,17.8,37.6,73.3,0.909,0.544,0.61,0.599,0.606,0.585,France
+79,Round of 32,1A vs 3CEFHI,2026-06-30 21:00:00-06,Estadio Azteca,Mexico City,Mexico,Ecuador,Ecuador,0-1,36.1,20.4,43.6,74.0,0.645,0.63,0.61,0.612,0.571,0.52,Ecuador
+80,Round of 32,1L vs 3EHIJK,2026-07-01 12:00:00-04,Mercedes-Benz Stadium,Atlanta,England,DR Congo,England,2-1,47.3,18.4,34.3,80.6,0.884,0.422,0.625,0.603,0.601,0.582,England
+81,Round of 32,1G vs 3AEHIJ,2026-07-01 16:00:00-07,Lumen Field,Seattle,Belgium,Senegal,Draw,3-3,39.0,18.7,42.3,68.9,0.779,0.65,0.681,0.56,0.647,0.674,Senegal
+82,Round of 32,1D vs 3BEFIJ,2026-07-01 20:00:00-07,Levi's Stadium,San Francisco Bay Area,USA,Bosnia and Herzegovina,United States,2-0,46.8,17.7,35.5,78.5,0.694,0.403,0.604,0.594,0.694,0.604,United States
+83,Round of 32,1H vs 2J,2026-07-02 15:00:00-07,SoFi Stadium,Los Angeles,Spain,Austria,Draw,2-2,42.6,18.0,39.4,68.9,0.902,0.614,0.622,0.626,0.572,0.57,Spain
+84,Round of 32,2K vs 2L,2026-07-02 19:00:00-04,BMO Field,Toronto,Portugal,Croatia,Draw,0-0,41.0,18.7,40.3,65.8,0.834,0.683,0.763,0.742,0.616,0.545,Portugal
+85,Round of 32,1B vs 3EFGIJ,2026-07-02 23:00:00-07,BC Place,Vancouver,Switzerland,Algeria,Algeria,1-2,35.3,19.0,45.7,77.4,0.649,0.574,0.661,0.561,0.626,0.633,Algeria
+86,Round of 32,2D vs 2G,2026-07-03 14:00:00-05,AT&T Stadium,Dallas,Australia,Egypt,Egypt,1-2,35.0,19.5,45.5,77.6,0.556,0.497,0.629,0.68,0.497,0.59,Egypt
+87,Round of 32,1J vs 2H,2026-07-03 18:00:00-04,Hard Rock Stadium,Miami,Argentina,Cape Verde,Argentina,2-1,51.7,17.4,30.9,89.9,0.943,0.329,0.676,0.638,0.603,0.456,Argentina
+88,Round of 32,1K vs 3DEIJL,2026-07-03 21:30:00-05,Arrowhead Stadium,Kansas City,Colombia,Ghana,Draw,0-0,42.8,18.1,39.1,69.5,0.738,0.415,0.643,0.684,0.456,0.615,Colombia
+89,Round of 16,W73 vs W75,2026-07-04 13:00:00-05,NRG Stadium,Houston,W73,W75,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+90,Round of 16,W74 vs W77,2026-07-04 17:00:00-04,Lincoln Financial Field,Philadelphia,W74,W77,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+91,Round of 16,W76 vs W78,2026-07-05 16:00:00-04,MetLife Stadium,New York/New Jersey,W76,W78,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+92,Round of 16,W79 vs W80,2026-07-05 20:00:00-06,Estadio Azteca,Mexico City,W79,W80,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+93,Round of 16,W83 vs W84,2026-07-06 15:00:00-05,AT&T Stadium,Dallas,W83,W84,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+94,Round of 16,W81 vs W82,2026-07-06 20:00:00-07,Lumen Field,Seattle,W81,W82,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+95,Round of 16,W86 vs W88,2026-07-07 12:00:00-04,Mercedes-Benz Stadium,Atlanta,W86,W88,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+96,Round of 16,W85 vs W87,2026-07-07 16:00:00-07,BC Place,Vancouver,W85,W87,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+97,Quarterfinals,W89 vs W90,2026-07-09 16:00:00-04,Gillette Stadium,Boston,W89,W90,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+98,Quarterfinals,W93 vs W94,2026-07-10 15:00:00-07,SoFi Stadium,Los Angeles,W93,W94,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+99,Quarterfinals,W91 vs W92,2026-07-11 17:00:00-04,Hard Rock Stadium,Miami,W91,W92,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+100,Quarterfinals,W95 vs W100,2026-07-11 21:00:00-05,Arrowhead Stadium,Kansas City,W95,W100,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+101,Semifinals,W97 vs W98,2026-07-14 15:00:00-05,AT&T Stadium,Dallas,W97,W98,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+102,Semifinals,W99 vs W100,2026-07-15 15:00:00-04,Mercedes-Benz Stadium,Atlanta,W99,W100,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+103,Third Place Playoff,RU101 vs RU102,2026-07-18 17:00:00-04,Hard Rock Stadium,Miami,RU101,RU102,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,
+104,Final,W101 vs W102,2026-07-19 15:00:00-04,MetLife Stadium,New York/New Jersey,W101,W102,TBD,0-0,33.3,33.4,33.3,50.0,0.5,0.5,0.5,0.5,0.5,0.5,

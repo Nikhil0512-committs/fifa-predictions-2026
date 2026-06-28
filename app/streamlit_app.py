@@ -67,7 +67,7 @@ def load_predictions_from_db():
         SELECT match_number, stage, group_or_label, kickoff_at, venue, city, home_team, away_team,
                predicted_winner, predicted_score, home_win_probability, draw_probability, away_win_probability,
                confidence, home_football_strength, away_football_strength, home_astrology_score, away_astrology_score,
-               home_numerology_score, away_numerology_score
+               home_numerology_score, away_numerology_score, predicted_qualifier
         FROM fixture_predictions
         ORDER BY kickoff_at, match_number;
     """)
@@ -76,11 +76,12 @@ def load_predictions_from_db():
     
     preds = []
     for r in rows:
-        match_num, stage, group, kickoff_at, venue, city, home, away, winner, score, p_win_a, p_draw, p_win_b, conf, str_a, str_b, ast_a, ast_b, num_a, num_b = r
+        match_num, stage, group, kickoff_at, venue, city, home, away, winner, score, p_win_a, p_draw, p_win_b, conf, str_a, str_b, ast_a, ast_b, num_a, num_b, qualifier = r
         
         home_clean = clean_team_name(home)
         away_clean = clean_team_name(away)
         winner_clean = clean_team_name(winner)
+        qualifier_clean = clean_team_name(qualifier) if qualifier else None
         
         # Parse score
         try:
@@ -106,6 +107,7 @@ def load_predictions_from_db():
             "raw_team_a": home,
             "raw_team_b": away,
             "winner": winner_clean,
+            "predicted_qualifier": qualifier_clean,
             "scoreline": {"team_a": score_a, "team_b": score_b},
             "probabilities": {
                 "win_a": p_win_a,
@@ -462,7 +464,7 @@ def element_class(elem: str) -> str:
 st.markdown(f"""
 <div class="hero-header">
     <div class="hero-title">🔮 FIFA 2026 AI ORACLE</div>
-    <div class="hero-subtitle">Official Fixtures & Cosmic Forecasts (Group Stage)</div>
+    <div class="hero-subtitle">Official Fixtures & Cosmic Forecasts (Knockout Stage)</div>
     <div class="weight-badge-container">
         <span class="weight-badge">⚖️ EQUAL WEIGHTAGE MODE (33.3% Football · 33.3% Astrology · 33.3% Numerology)</span>
         <span class="weight-badge" style="background:rgba(52,211,153,0.12); border-color:rgba(52,211,153,0.3); color:#34d399;">⚡ HIGH-DECISIVENESS TEMPERATURE SCALING ACTIVE</span>
@@ -517,10 +519,14 @@ with col_left:
                 outcome_label = f"{f['team_b']} Win"
                 outcome_badge_class = "outcome-badge outcome-win"
                 
+            qualifier_html = ""
+            if f.get("predicted_qualifier"):
+                qualifier_html = f"""<div style="font-size:0.8rem; color:#34d399; margin-top:0.3rem; font-weight:600; display:flex; align-items:center; gap:4px;">🔮 <span style="text-transform:uppercase; font-size:0.7rem; color:rgba(255,255,255,0.4); font-weight:normal;">To Qualify:</span> {f['predicted_qualifier']}</div>"""
+
             # Draw the custom card
             st.markdown(f"""
             <div class="{card_class}">
-                <div class="match-card-meta">{f['group']} &nbsp;·&nbsp; {f['venue']}</div>
+                <div class="match-card-meta">{f['stage']} &nbsp;·&nbsp; {f['venue']}</div>
                 <div class="match-card-teams">
                     <span>{f['team_a']}</span>
                     <span class="match-card-score">{f['scoreline']['team_a']} - {f['scoreline']['team_b']}</span>
@@ -530,6 +536,7 @@ with col_left:
                     <span>Forecast: <span class="{outcome_badge_class}">{outcome_label}</span></span>
                     <span style="font-family:'JetBrains Mono'; font-weight:600; color:rgba(255,255,255,0.7);">{f['confidence']}% conf</span>
                 </div>
+                {qualifier_html}
             </div>
             """, unsafe_allow_html=True)
             
@@ -572,12 +579,21 @@ with col_right:
         # Outer Detail Container
         st.markdown('<div class="detail-container">', unsafe_allow_html=True)
         
+        qualifier_detail = ""
+        if R.get("predicted_qualifier"):
+            qualifier_detail = f"""
+            <div style="margin-top:0.6rem; font-size:0.95rem; font-weight:700; color:#34d399; border-top:1px solid rgba(52,211,153,0.18); padding-top:0.5rem; display:flex; align-items:center; justify-content:center; gap:6px;">
+                🔮 <span style="text-transform:uppercase; font-size:0.75rem; color:rgba(255,255,255,0.4); font-weight:normal;">Predicted to Qualify:</span> {R['predicted_qualifier']}
+            </div>
+            """
+
         # Outcome Card
         st.markdown(f"""
         <div class="main-winner-card">
             <div style="font-size:0.85rem; color:rgba(180,210,255,0.6); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.3rem;">{winner_label}</div>
             <div class="main-winner-title">{winner_emoji} {winner_text}</div>
             <div class="main-scoreline">{score['team_a']} — {score['team_b']}</div>
+            {qualifier_detail}
             <div style="font-size:0.8rem; color:rgba(180,210,255,0.45); margin-top:0.4rem;">{R['venue']} &nbsp;·&nbsp; {R['group']}</div>
             <div style="margin-top:0.8rem; font-size:0.85rem; color:white;">
                 Composite Oracle Confidence: <span style="font-weight:700; color:{conf_color}; font-family:'JetBrains Mono'; font-size:1.1rem;">{conf:.1f}%</span>

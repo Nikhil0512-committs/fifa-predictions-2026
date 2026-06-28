@@ -34,6 +34,38 @@ db_path = "./data/processed/fifa2026_predictions.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
+# Create table and ensure column exists
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS fixture_predictions (
+        match_number INTEGER PRIMARY KEY,
+        stage TEXT,
+        group_or_label TEXT,
+        kickoff_at TEXT,
+        venue TEXT,
+        city TEXT,
+        home_team TEXT,
+        away_team TEXT,
+        predicted_winner TEXT,
+        predicted_score TEXT,
+        home_win_probability REAL,
+        draw_probability REAL,
+        away_win_probability REAL,
+        confidence REAL,
+        home_football_strength REAL,
+        away_football_strength REAL,
+        home_astrology_score REAL,
+        away_astrology_score REAL,
+        home_numerology_score REAL,
+        away_numerology_score REAL,
+        predicted_qualifier TEXT
+    );
+""")
+try:
+    cursor.execute("ALTER TABLE fixture_predictions ADD COLUMN predicted_qualifier TEXT;")
+except sqlite3.OperationalError:
+    pass
+conn.commit()
+
 # Get all matches from fixtures_2026
 cursor.execute("""
     SELECT match_number, stage_name, match_label, kickoff_at, venue_name, city_name, home_team, away_team 
@@ -109,15 +141,16 @@ for f in fixtures:
             match_number, stage, group_or_label, kickoff_at, venue, city, home_team, away_team,
             predicted_winner, predicted_score, home_win_probability, draw_probability, away_win_probability,
             confidence, home_football_strength, away_football_strength, home_astrology_score, away_astrology_score,
-            home_numerology_score, away_numerology_score
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            home_numerology_score, away_numerology_score, predicted_qualifier
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     """, (
         match_num, stage, group_or_label, kickoff_at, venue, city, home, away,
         pred["winner"], f"{pred['scoreline']['team_a']}-{pred['scoreline']['team_b']}",
         pred["probabilities"]["win_a"], pred["probabilities"]["draw"], pred["probabilities"]["win_b"],
         pred["confidence"], pred["team_a_analysis"]["strength"], pred["team_b_analysis"]["strength"],
         pred["team_a_analysis"]["astro_score"], pred["team_b_analysis"]["astro_score"],
-        pred["team_a_analysis"]["numerology_score"], pred["team_b_analysis"]["numerology_score"]
+        pred["team_a_analysis"]["numerology_score"], pred["team_b_analysis"]["numerology_score"],
+        pred.get("predicted_qualifier")
     ))
     inserted_count += 1
 
