@@ -304,12 +304,16 @@ st.markdown("""
 
 /* Right Panel View */
 .detail-container {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 1.5rem;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 16px;
     padding: 1.5rem;
     min-height: 75vh;
     backdrop-filter: blur(20px);
+    z-index: 99;
 }
 .main-winner-card {
     background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(168,85,247,0.08), rgba(0,255,148,0.04));
