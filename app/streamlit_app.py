@@ -28,6 +28,7 @@ from fifa_predictor.models.predict import (
     _team_astro_breakdown,
     _team_numerology_breakdown,
     ZODIAC_ELEMENTS,
+    _get_combined_form,
 )
 from fifa_predictor.knowledge import (
     FIFA_RANKINGS, ELO_RATINGS, RECENT_FORM,
@@ -118,7 +119,7 @@ def load_predictions_from_db():
             "team_a_analysis": {
                 "elo": ELO_RATINGS.get(home_clean, 1500),
                 "strength": str_a,
-                "recent_form": RECENT_FORM.get(home_clean, {}),
+                "recent_form": _get_combined_form(home_clean),
                 "squad_value_m": SQUAD_VALUE_M.get(home_clean, 0),
                 "astro_score": ast_a,
                 "element_harmony": _element_harmony(home_clean) if home_clean in KEY_PLAYERS else 0.5,
@@ -128,7 +129,7 @@ def load_predictions_from_db():
             "team_b_analysis": {
                 "elo": ELO_RATINGS.get(away_clean, 1500),
                 "strength": str_b,
-                "recent_form": RECENT_FORM.get(away_clean, {}),
+                "recent_form": _get_combined_form(away_clean),
                 "squad_value_m": SQUAD_VALUE_M.get(away_clean, 0),
                 "astro_score": ast_b,
                 "element_harmony": _element_harmony(away_clean) if away_clean in KEY_PLAYERS else 0.5,

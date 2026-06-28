@@ -49,16 +49,117 @@ def _elo_win_probability(elo_a: float, elo_b: float) -> tuple[float, float, floa
     return p_win_a / s, p_draw / s, p_win_b / s
 
 
+_GROUP_STAGE_FORM = None
+
+def _load_group_stage_form() -> dict[str, dict[str, int]]:
+    global _GROUP_STAGE_FORM
+    if _GROUP_STAGE_FORM is not None:
+        return _GROUP_STAGE_FORM
+    
+    import json
+    import os
+    
+    _GROUP_STAGE_FORM = {}
+    json_path = "./scratch/group_stage_wiki_results.json"
+    if not os.path.exists(json_path):
+        # try parent directory or absolute path relative to project root
+        json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "scratch", "group_stage_wiki_results.json")
+        
+    # Initialize for all known teams
+    from fifa_predictor.knowledge import ELO_RATINGS
+    for t in ELO_RATINGS.keys():
+        _GROUP_STAGE_FORM[t] = {"w": 0, "d": 0, "l": 0, "gf": 0, "ga": 0}
+        
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                name_mapping = {
+                    "Czech Republic": "Czechia",
+                    "Cabo Verde": "Cape Verde",
+                    "Curaao": "Curaçao",
+                    "Cte d'Ivoire": "Ivory Coast",
+                    "IR Iran": "Iran",
+                    "Türkiye": "Turkey",
+                    "USA": "United States",
+                    "Winner UEFA Playoff A": "Bosnia and Herzegovina",
+                    "Winner UEFA Playoff B": "Sweden",
+                    "Winner UEFA Playoff C": "Turkey",
+                    "Winner UEFA Playoff D": "Czechia",
+                    "Winner FIFA Playoff 1": "DR Congo",
+                    "Winner FIFA Playoff 2": "Iraq",
+                }
+                def clean_name(n):
+                    return name_mapping.get(n, n)
+                
+                for item in data:
+                    if item.get("has_score"):
+                        home = clean_name(item["home_team"])
+                        away = clean_name(item["away_team"])
+                        sh = item.get("score_home")
+                        sa = item.get("score_away")
+                        if sh is not None and sa is not None:
+                            if home not in _GROUP_STAGE_FORM:
+                                _GROUP_STAGE_FORM[home] = {"w": 0, "d": 0, "l": 0, "gf": 0, "ga": 0}
+                            if away not in _GROUP_STAGE_FORM:
+                                _GROUP_STAGE_FORM[away] = {"w": 0, "d": 0, "l": 0, "gf": 0, "ga": 0}
+                                
+                            _GROUP_STAGE_FORM[home]["gf"] += sh
+                            _GROUP_STAGE_FORM[home]["ga"] += sa
+                            _GROUP_STAGE_FORM[away]["gf"] += sa
+                            _GROUP_STAGE_FORM[away]["ga"] += sh
+                            
+                            if sh > sa:
+                                _GROUP_STAGE_FORM[home]["w"] += 1
+                                _GROUP_STAGE_FORM[away]["l"] += 1
+                            elif sh < sa:
+                                _GROUP_STAGE_FORM[away]["w"] += 1
+                                _GROUP_STAGE_FORM[home]["l"] += 1
+                            else:
+                                _GROUP_STAGE_FORM[home]["d"] += 1
+                                _GROUP_STAGE_FORM[away]["d"] += 1
+        except Exception as e:
+            print(f"Warning: Could not load group stage form: {e}")
+            
+    return _GROUP_STAGE_FORM
+
+def _get_combined_form(team: str) -> dict[str, int]:
+    from fifa_predictor.knowledge import RECENT_FORM
+    hist = RECENT_FORM.get(team, {"w": 4, "d": 3, "l": 3, "gf": 11, "ga": 12})
+    
+    gs_forms = _load_group_stage_form()
+    gs = gs_forms.get(team, {"w": 0, "d": 0, "l": 0, "gf": 0, "ga": 0})
+    
+    # Combined form: World Cup group stage matches count double!
+    w_coef = 2.0
+    return {
+        "w": hist["w"] + int(gs["w"] * w_coef),
+        "d": hist["d"] + int(gs["d"] * w_coef),
+        "l": hist["l"] + int(gs["l"] * w_coef),
+        "gf": hist["gf"] + int(gs["gf"] * w_coef),
+        "ga": hist["ga"] + int(gs["ga"] * w_coef),
+        "gs_w": gs["w"],
+        "gs_d": gs["d"],
+        "gs_l": gs["l"],
+        "gs_gf": gs["gf"],
+        "gs_ga": gs["ga"]
+    }
+
 def _form_elo_adjustment(team: str) -> float:
     """
-    Returns an Elo rating adjustment (-120 to +120 points) based on current form
-    of the team's last 10 competitive international matches.
+    Returns an Elo rating adjustment (-120 to +120 points) based on combined form
+    (historical + actual 2026 World Cup group stage performance weighted double).
     """
-    form = RECENT_FORM.get(team, {"w": 4, "d": 3, "l": 3, "gf": 11, "ga": 12})
+    form = _get_combined_form(team)
+    # Total games in combined form = 10 (historical) + 3 * 2 (weighted World Cup) = 16
+    # Max points in combined form = 16 * 3 = 48
     pts = form["w"] * 3 + form["d"]
-    pts_ratio = pts / 30.0
+    pts_ratio = pts / 48.0
+    
     gd = form["gf"] - form["ga"]
-    gd_ratio = max(0.0, min(1.0, (gd + 15) / 30.0))
+    # Max GD range is wider: let's clamp gd_ratio between 0 and 1
+    gd_ratio = max(0.0, min(1.0, (gd + 25) / 50.0))
+    
     form_score = 0.70 * pts_ratio + 0.30 * gd_ratio
     return (form_score - 0.5) * 240.0
 
@@ -229,15 +330,18 @@ def _team_astro_score(team: str, match_date: date) -> float:
     if not players:
         return 0.50
     scores = [_planetary_ruler_strength(dob, match_date) for _, dob, _ in players]
-    # Weight: forwards and midfielders count more (they score goals)
+    
     weighted_scores = []
-    for (_, dob, pos), score in zip(players, scores):
+    total_w = 0.0
+    for idx, ((_, dob, pos), score) in enumerate(zip(players, scores)):
+        # Base position weight
         w = 1.4 if pos == "FW" else (1.1 if pos == "MF" else 0.9)
+        # Captain/Leader weight boost (first player in rosters is the marquee star)
+        if idx == 0:
+            w *= 1.5
         weighted_scores.append(score * w)
-    total_w = sum(
-        (1.4 if pos == "FW" else (1.1 if pos == "MF" else 0.9))
-        for _, _, pos in players
-    )
+        total_w += w
+        
     return sum(weighted_scores) / total_w
 
 
@@ -348,10 +452,14 @@ def _team_numerology_score(team: str, match_date: date) -> float:
     match_vibe = _match_date_vibration(match_date)
     scores = []
     weights = []
-    for _, dob, pos in players:
+    for idx, (_, dob, pos) in enumerate(players):
         lp = _life_path_number(dob)
         res = _numerological_resonance(lp, match_vibe)
+        # Base position weight
         w = 1.5 if pos == "FW" else (1.2 if pos == "MF" else 0.9)
+        # Captain/Leader weight boost
+        if idx == 0:
+            w *= 1.5
         scores.append(res * w)
         weights.append(w)
     return sum(scores) / sum(weights)
